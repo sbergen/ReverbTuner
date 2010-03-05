@@ -3,11 +3,14 @@
 
 namespace ReverbTuner {
 
-class EvaluationResult
+/// Currently the result is only a floating point value
+struct EvaluationResult
 {
-  public:
-	EvaluationResult ();
-	~EvaluationResult ();
+	EvaluationResult () : value(0.0) {}
+	// Comparison etc.
+	operator float() { return value; }
+
+	float value;
 };
 
 } // namespace ReverbTuner
