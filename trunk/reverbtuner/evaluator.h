@@ -5,7 +5,6 @@ namespace ReverbTuner {
 
 class DataSource;
 class ParameterSet;
-
 class EvaluationResult;
 class EvaluationResources;
 
