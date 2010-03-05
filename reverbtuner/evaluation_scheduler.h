@@ -4,7 +4,7 @@
 namespace ReverbTuner {
 
 class DataSource;
-template<typename T> class EvaluationSet<T>;
+class EvaluationSet;
 
 /** Base class for a evaluation scheduler, that handles both memory allocation and concurrency
   * \tparam EvaluatorType evaluator which is use, must be a subclass of \a EvaluationResources
@@ -25,7 +25,7 @@ class EvaluationScheduler
 	
 	/** Evaluates a set of paramters. Blocks until evaluation is finished.
 	  */
-	virtual void evaluate (EvaluationSet<EvaluatorType> & set) = 0;
+	virtual void evaluate (EvaluationSet & set) = 0;
 	
   protected:
 	DataSource const & data_source;
