@@ -16,15 +16,19 @@ class Parameter
 		TypeToggled
 	};
 	
-	Parameter (float default_value, float min_value, float max_value);
+	Parameter (unsigned index, float default_value, float min_value, float max_value);
 	
 	void set_value (float val);
 	float generate_random_value ();
 	
+	unsigned get_index () const { return index; }
 	float get_value () const { return value; }
 	Type get_type () const { return type; }
 	
   private:
+	  
+	unsigned index;
+	
 	Type  type;
 	float value;
 	float min_value;

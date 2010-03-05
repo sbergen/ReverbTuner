@@ -15,6 +15,8 @@ class ParameterSet
 	ParameterSet ();
 	~ParameterSet ();
 	
+	ParameterSet & operator= (ParameterSet const & other);
+	
 	typedef boost::ptr_vector<Parameter> Container;
 	
 	Container const & data() const { return parameters; }
