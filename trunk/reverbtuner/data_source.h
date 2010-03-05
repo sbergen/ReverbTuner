@@ -6,6 +6,8 @@
 
 namespace ReverbTuner {
 
+class Plugin;
+
 /** Stores data needed for evaluation, namely the dry and target files.
   * Evaluators process the dry file and compare it to the target file.
   */
@@ -15,7 +17,7 @@ class DataSource
 	
 	typedef std::vector<float> Data;
 	
-	DataSource (std::string const & dry_file, std::string const & target_file);
+	DataSource (std::string const & dry_file, std::string const & target_file, Plugin & plugin);
 	~DataSource ();
 	
 	Data const & get_dry_data() const { return dry_data; }
@@ -24,6 +26,7 @@ class DataSource
   private:
 	Data dry_data;
 	Data target_data;
+	Plugin & plugin;
 };
 
 } // namespace ReverbTuner
