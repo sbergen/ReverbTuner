@@ -4,6 +4,8 @@
 #include <string>
 #include <slv2/slv2.h>
 
+#include "lv2_world.h"
+
 namespace ReverbTuner {
 
 class Lv2Plugin;
@@ -22,10 +24,7 @@ class Lv2PluginFactory
 	Lv2Plugin * plugin (unsigned index);
 
   private:
-	double samplerate;
-	
-	SLV2World  world;
-	SLV2Plugins plugins;
+	Lv2World    world;
 
 };
 

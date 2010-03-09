@@ -5,29 +5,24 @@
 namespace ReverbTuner {
 
 Lv2PluginFactory::Lv2PluginFactory (double samplerate)
-  : samplerate (samplerate)
+  : world (samplerate)
 {
-	world = slv2_world_new ();
-	slv2_world_load_all (world);
-	plugins = slv2_world_get_all_plugins (world);
 }
 
 Lv2PluginFactory::~Lv2PluginFactory ()
 {
-	slv2_plugins_free (world, plugins);
-	slv2_world_free (world);
 }
 
 unsigned
 Lv2PluginFactory::plugin_count ()
 {
-	return slv2_plugins_size (plugins);
+	return slv2_plugins_size (world.plugins);
 }
 
 std::string
 Lv2PluginFactory::plugin_name (unsigned index)
 {
-	SLV2Plugin plugin = slv2_plugins_get_at (plugins, index);
+	SLV2Plugin plugin = slv2_plugins_get_at (world.plugins, index);
 	SLV2Value value = slv2_plugin_get_name (plugin);
 	std::string str(slv2_value_as_string (value));
 	slv2_value_free (value);
@@ -37,8 +32,8 @@ Lv2PluginFactory::plugin_name (unsigned index)
 Lv2Plugin *
 Lv2PluginFactory::plugin (unsigned index)
 {
-	SLV2Plugin plugin = slv2_plugins_get_at (plugins, index);
-	return new Lv2Plugin (plugin, samplerate);
+	SLV2Plugin plugin = slv2_plugins_get_at (world.plugins, index);
+	return new Lv2Plugin (world, plugin);
 }
 
 

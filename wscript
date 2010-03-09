@@ -35,6 +35,7 @@ def build(bld):
 		src/parameter_values.cc
 		src/lv2_plugin.cc
 		src/lv2_plugin_factory.cc
+		src/lv2_world.cc
 	'''
 
 	reverbtuner.uselib       = 'SLV2'
