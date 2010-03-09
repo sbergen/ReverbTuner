@@ -1,8 +1,7 @@
 #ifndef REVERB_TUNER_PARAMETER_SET_H
 #define REVERB_TUNER_PARAMETER_SET_H
 
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <vector>
+#include <boost/ptr_container/ptr_map.hpp>
 
 namespace ReverbTuner {
 
@@ -15,9 +14,7 @@ class ParameterSet
 	ParameterSet ();
 	~ParameterSet ();
 	
-	ParameterSet & operator= (ParameterSet const & other);
-	
-	typedef boost::ptr_vector<Parameter> Container;
+	typedef boost::ptr_map<unsigned, Parameter> Container;
 	
 	Container const & data() const { return parameters; }
 	Container & data() { return parameters; }

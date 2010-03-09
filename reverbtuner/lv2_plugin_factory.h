@@ -2,7 +2,7 @@
 #define REVERB_TUNER_LV2_PLUGIN_FACTORY_H
 
 #include <string>
-#include <slv2.h>
+#include <slv2/slv2.h>
 
 namespace ReverbTuner {
 
@@ -25,7 +25,7 @@ class Lv2PluginFactory
 	double samplerate;
 	
 	SLV2World  world;
-	SLV2Plugin plugins;
+	SLV2Plugins plugins;
 
 };
 

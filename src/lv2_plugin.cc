@@ -5,6 +5,7 @@ namespace ReverbTuner {
 Lv2Plugin::Lv2Plugin (SLV2Plugin plugin, double samplerate)
   : plugin (plugin)
   , samplerate (samplerate)
+  , param_vals (param_set)
 {
 	instance = slv2_plugin_instantiate (plugin, samplerate, NULL);
 	slv2_instance_activate (instance);
@@ -19,7 +20,7 @@ Lv2Plugin::~Lv2Plugin()
 
 
 Plugin *
-Lv2Plugin::clone()
+Lv2Plugin::clone() const
 {
 	return new Lv2Plugin (plugin, samplerate);
 }
@@ -27,25 +28,23 @@ Lv2Plugin::clone()
 void
 Lv2Plugin::run (float * in, float * out, unsigned frames)
 {
-	slv2_instance_connect_port (instance, in_port, in);
-	slv2_instance_connect_port (instance, out_port, out);
+	slv2_instance_connect_port (instance, in_port_index, in);
+	slv2_instance_connect_port (instance, out_port_index, out);
 	slv2_instance_run (instance, frames);
 	
 }
 
 void
-Lv2Plugin::apply_parameters (ParameterSet const & params)
+Lv2Plugin::apply_parameters (ParameterValues const & params)
 {
-	parameters = params;
+	param_vals = params;
 }
 
-void
-Lv2Plugin::get_parameters (ParameterSet & params)
+ParameterSet const &
+Lv2Plugin::get_parameters () const
 {
-	params = parameters;
+	return param_set;
 }
 
 
 } // namespace ReverbTuner
-
-#endif // REVERB_TUNER_LV2_PLUGIN_H
