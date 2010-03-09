@@ -2,6 +2,7 @@
 #include "reverbtuner/lv2_world.h"
 
 #include <stdexcept>
+#include <iostream>
 
 namespace ReverbTuner {
 
@@ -65,6 +66,7 @@ Lv2Plugin::init_params_from_plugin ()
 					in_port_index = i;
 					input_found = true;
 				}
+				std::cerr << "found input" << std::endl;
 			} else if (slv2_port_is_a (plugin, port, world.control_class)) {
 				add_parameter_from_port (i, port);
 			}
@@ -73,6 +75,7 @@ Lv2Plugin::init_params_from_plugin ()
 				out_port_index = i;
 				output_found = true;
 			}
+			std::cerr << "found output" << std::endl;
 		}
 	}
 	
