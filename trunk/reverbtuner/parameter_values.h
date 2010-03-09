@@ -13,7 +13,6 @@ class ParameterValues
   public:
 	
 	ParameterValues (ParameterSet const & set);
-	~ParameterValues ();
 	
 	ParameterValues & operator= (ParameterValues const & other);
 	
