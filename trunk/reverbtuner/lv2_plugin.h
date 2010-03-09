@@ -9,11 +9,13 @@
 
 namespace ReverbTuner {
 
+class Lv2World;
+
 class Lv2Plugin : public Plugin
 {
   public:
 
-	Lv2Plugin (SLV2Plugin plugin, double samplerate);
+	Lv2Plugin (Lv2World & world, SLV2Plugin plugin);
 	~Lv2Plugin();
 	
 	Plugin * clone() const;
@@ -22,8 +24,13 @@ class Lv2Plugin : public Plugin
 	ParameterSet const & get_parameters () const;
 	
   private:
+	
+	void init_params_from_plugin ();
+	void add_parameter_from_port (unsigned index, SLV2Port port);
+	float value_as_float (SLV2Value val);
+	
+	Lv2World & world;
 	SLV2Plugin plugin;
-	double samplerate;
 	SLV2Instance instance;
 	
 	unsigned in_port_index;
