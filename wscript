@@ -22,9 +22,11 @@ def configure(conf):
 	conf.check_tool('compiler_cxx')
 	
 	autowaf.check_pkg(conf, 'slv2', uselib_store='SLV2', atleast_version='0.6.6', mandatory=True)
+	autowaf.check_pkg(conf, 'aubio', uselib_store='AUBIO', atleast_version='0.3.3', mandatory=True)
+	autowaf.check_pkg(conf, 'sndfile', uselib_store='SNDFILE', atleast_version='1.0.17', mandatory=True)
 	
 	# Boost headers
-	autowaf.check_header(conf, 'boost/ptr_container/ptr_map.hpp')
+	autowaf.check_header(conf, 'boost/ptr_container/ptr_map.hpp', mandatory=True)
 
 def build(bld):
 
@@ -36,9 +38,12 @@ def build(bld):
 		src/lv2_plugin.cc
 		src/lv2_plugin_factory.cc
 		src/lv2_world.cc
+		src/data_source.cc
+		src/mfcc_evaluator.cc
+		src/mfcc_processor.cc
 	'''
 
-	reverbtuner.uselib       = 'SLV2'
+	reverbtuner.uselib       = 'SLV2 AUBIO SNDFILE'
 	reverbtuner.target       = 'reverbtuner'
 	reverbtuner.install_path = ''
 

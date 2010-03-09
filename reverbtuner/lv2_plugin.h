@@ -19,7 +19,8 @@ class Lv2Plugin : public Plugin
 	~Lv2Plugin();
 	
 	Plugin * clone() const;
-	void run (float * in, float * out, unsigned frames);
+	void reset ();
+	void run (float const * in, float * out, unsigned frames);
 	void apply_parameters (ParameterValues const & params);
 	ParameterSet const & get_parameters () const;
 	
