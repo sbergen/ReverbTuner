@@ -4,7 +4,7 @@
 namespace ReverbTuner {
 
 class DataSource;
-class ParameterSet;
+class ParameterValues;
 class EvaluationResult;
 
 /// Base class for all Parameter evaluators.
@@ -13,16 +13,16 @@ class Evaluator
   public:
 	Evaluator (DataSource const & data_source)
 	  : data_source (data_source) {}
+	
 	virtual ~Evaluator() {}
 
-  protected:
-	
 	/** Evaluates the given parameter set for the data source set in constructor.
 	  * \param parameters The parameter set to evaluate
 	  * \param result Result stucutre into which the result is stored
 	  */
-	virtual void evaluate_parameters (ParameterSet const & parameters, EvaluationResult const & result) = 0;
-	
+	virtual void evaluate_parameters (ParameterValues const & parameters, EvaluationResult const & result) = 0;
+
+  protected:
 	DataSource const & data_source;
 };
 

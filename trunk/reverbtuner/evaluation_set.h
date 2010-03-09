@@ -6,7 +6,7 @@
 
 namespace ReverbTuner {
 
-class ParameterSet;
+class ParameterValues;
 class EvaluationResult;
 
 /** Stores parameter-result-pairs for evaluation.
@@ -21,16 +21,16 @@ class EvaluationSet
 
 	bool resize (unsigned new_size);
 	
-	bool first_pair (ParameterSet const * parameters, EvaluationResult * result) const;
-	bool first_pair (ParameterSet * parameters, EvaluationResult * result);
+	bool first_pair (ParameterValues const * parameters, EvaluationResult * result) const;
+	bool first_pair (ParameterValues * parameters, EvaluationResult * result);
 	
-	bool next_pair (ParameterSet const * parameters, EvaluationResult * result) const;
-	bool next_pair (ParameterSet * parameters, EvaluationResult * result);
+	bool next_pair (ParameterValues const * parameters, EvaluationResult * result) const;
+	bool next_pair (ParameterValues * parameters, EvaluationResult * result);
 	
   private:
 	struct DataPair
 	{
-		ParameterSet parameters;
+		ParameterValues parameters;
 		EvaluationResult result
 	};
 	

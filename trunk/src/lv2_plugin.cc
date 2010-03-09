@@ -12,9 +12,8 @@ Lv2Plugin::Lv2Plugin (Lv2World & world, SLV2Plugin plugin)
   , param_vals (param_set)
 {
 	instance = slv2_plugin_instantiate (plugin, world.samplerate, NULL);
-	slv2_instance_activate (instance);
-	
 	init_params_from_plugin ();
+	slv2_instance_activate (instance);
 }
 
 Lv2Plugin::~Lv2Plugin()
@@ -30,12 +29,19 @@ Lv2Plugin::clone() const
 }
 
 void
-Lv2Plugin::run (float * in, float * out, unsigned frames)
+Lv2Plugin::reset ()
 {
-	slv2_instance_connect_port (instance, in_port_index, in);
+	slv2_instance_deactivate (instance);
+	slv2_instance_activate (instance);
+}
+
+void
+Lv2Plugin::run (float const * in, float * out, unsigned frames)
+{
+	// In port const cast should be safe
+	slv2_instance_connect_port (instance, in_port_index, const_cast<float *> (in));
 	slv2_instance_connect_port (instance, out_port_index, out);
 	slv2_instance_run (instance, frames);
-	
 }
 
 void
