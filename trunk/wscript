@@ -27,6 +27,8 @@ def configure(conf):
 	
 	# Boost headers
 	autowaf.check_header(conf, 'boost/ptr_container/ptr_map.hpp', mandatory=True)
+	autowaf.check_header(conf, 'boost/ptr_container/ptr_list.hpp', mandatory=True)
+	autowaf.check_header(conf, 'boost/thread.hpp', mandatory=True)
 	autowaf.check_header(conf, 'boost/shared_ptr.hpp', mandatory=True)
 
 def build(bld):
@@ -42,6 +44,7 @@ def build(bld):
 		src/data_source.cc
 		src/mfcc_evaluator.cc
 		src/mfcc_processor.cc
+		src/evaluation_set.cc
 	'''
 
 	reverbtuner.uselib       = 'SLV2 AUBIO SNDFILE'
