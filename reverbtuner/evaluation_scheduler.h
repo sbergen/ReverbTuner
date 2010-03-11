@@ -7,7 +7,9 @@ class DataSource;
 class EvaluationSet;
 
 /** Base class for a evaluation scheduler
+  * \tparam EvaluatorType type of evaluator, must be subclass of Evaluator
   */
+template<typename EvaluatorType>
 class EvaluationScheduler
 {
   public:
@@ -16,15 +18,13 @@ class EvaluationScheduler
 	virtual ~EvaluationScheduler () {}
 	
 	/** Initialize evaluators
-	  * \tparam EvaluatorType type of evaluator to instantiate, must be subclass of Evaluator
 	  * \param amount number of evaluators to instantiate
 	  */
-	template<typename EvaluatorType>
 	virtual void alloc_resources (unsigned amount) = 0;
 	
 	/** Evaluates a set of paramters. Blocks until evaluation is finished.
 	  */
-	virtual void evaluate (EvaluationSet & set) = 0;
+	virtual void evaluate (EvaluationSet const & set) = 0;
 	
   protected:
 	DataSource const & data_source;

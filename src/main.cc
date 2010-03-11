@@ -4,6 +4,8 @@
 #include "reverbtuner/mfcc_evaluator.h"
 #include "reverbtuner/parameter_values.h"
 #include "reverbtuner/evaluation_result.h"
+#include "reverbtuner/evaluation_set.h"
+#include "reverbtuner/single_threaded_scheduler.h"
 
 #include <iostream>
 
@@ -49,14 +51,18 @@ int main ()
 	
 	std::cout << "Instantiating evaluator for plugin \"" << factory.plugin_name (which) << "\"" << std::endl;
 	
-	MfccEvaluator evaluator (data_source);
-	ParameterValues values (plugin->get_parameters());
-	EvaluationResult result;
+	SingleThreadedScheduler<MfccEvaluator> scheduler (data_source);
+	EvaluationSet set (plugin->get_parameters());
+	set.resize (1);
+	
+	//ParameterValues values (plugin->get_parameters());
+	//EvaluationResult result;
 	
 	std::cout << "Running evaluator.." << std::endl;
-	evaluator.evaluate_parameters (values, result);
 	
-	std::cout << "Got result: " << (float) result << std::endl;
+	scheduler.evaluate (set);
+	
+	//std::cout << "Got result: " << (float) result << std::endl;
 	
 	std::cout << "Done!" << std::endl;
 }
