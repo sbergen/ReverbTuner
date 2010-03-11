@@ -7,9 +7,7 @@ class DataSource;
 class EvaluationSet;
 
 /** Base class for a evaluation scheduler
-  * \tparam EvaluatorType type of evaluator, must be subclass of Evaluator
   */
-template<typename EvaluatorType>
 class EvaluationScheduler
 {
   public:

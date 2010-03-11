@@ -2,9 +2,6 @@
 #include "reverbtuner/lv2_plugin.h"
 #include "reverbtuner/data_source.h"
 #include "reverbtuner/mfcc_evaluator.h"
-#include "reverbtuner/parameter_values.h"
-#include "reverbtuner/evaluation_result.h"
-#include "reverbtuner/evaluation_set.h"
 #include "reverbtuner/single_threaded_scheduler.h"
 
 #include <iostream>

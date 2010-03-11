@@ -36,7 +36,6 @@ def build(bld):
 	reverbtuner = bld.new_task_gen('cxx', 'program')
 	reverbtuner.source = '''
 		src/main.cc
-		src/parameter.cc
 		src/parameter_values.cc
 		src/lv2_plugin.cc
 		src/lv2_plugin_factory.cc
@@ -46,7 +45,7 @@ def build(bld):
 		src/mfcc_processor.cc
 		src/evaluation_set.cc
 	'''
-
+	reverbtuner.includes     = '.'
 	reverbtuner.uselib       = 'SLV2 AUBIO SNDFILE'
 	reverbtuner.target       = 'reverbtuner'
 	reverbtuner.install_path = ''

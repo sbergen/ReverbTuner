@@ -1,7 +1,7 @@
 #ifndef REVERB_TUNER_PARAMETER_H
 #define REVERB_TUNER_PARAMETER_H
 
-#include <vector>
+#include "utils.h"
 
 namespace ReverbTuner {
 
@@ -16,13 +16,19 @@ class Parameter
 		TypeToggled
 	};
 	
-	Parameter (Type type, float default_value, float min_value, float max_value);
+	Parameter (Type type, float default_value, float min_value, float max_value)
+	  : type (type)
+	  , min_value (min_value)
+	  , max_value (max_value)
+	  , default_value (default_value)
+	{}
+	
+	void make_valid (float & value) const { clamp (value, min_value, max_value); }
 	
 	Type get_type () const { return type; }
 	float get_minimum () const { return min_value; }
 	float get_maximum () const { return max_value; }
 	float get_default () const { return default_value; }
-	float generate_random_value () const;
 	
   private:
 	
