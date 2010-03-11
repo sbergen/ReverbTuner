@@ -13,10 +13,9 @@ class ParameterValues
   public:
 	
 	ParameterValues (ParameterSet const & set);
-	
 	ParameterValues & operator= (ParameterValues const & other);
 	
-	typedef std::map<unsigned, float> Values;
+	ParameterSet const & get_set () { return set; }
 	
 	float & operator[] (unsigned index);
 	float operator[] (unsigned index) const;
@@ -25,6 +24,8 @@ class ParameterValues
 	float operator[] (Parameter const & param) const;
 	
   private:
+	typedef std::map<unsigned, float> Values;
+	
 	ParameterSet const & set;
 	Values values;
 };
