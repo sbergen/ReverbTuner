@@ -6,7 +6,12 @@ namespace ReverbTuner {
 
 ParameterValues::ParameterValues (ParameterSet const & set)
   : set (set)
-{}
+{
+	ParameterSet::Container const & data = set.data ();
+	for (ParameterSet::Container::const_iterator it = data.begin(); it != data.end(); ++it) {
+		values[it->first] = it->second->get_default ();
+	}
+}
 
 ParameterValues &
 ParameterValues::operator= (ParameterValues const & other)
