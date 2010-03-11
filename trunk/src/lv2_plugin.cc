@@ -38,6 +38,8 @@ Lv2Plugin::reset ()
 void
 Lv2Plugin::run (float const * in, float * out, unsigned frames)
 {
+	ensure_dummy_buffer (frames);
+	
 	// In port const cast should be safe
 	slv2_instance_connect_port (instance, in_port_index, const_cast<float *> (in));
 	slv2_instance_connect_port (instance, out_port_index, out);
@@ -59,6 +61,7 @@ Lv2Plugin::get_parameters () const
 void
 Lv2Plugin::init_params_from_plugin ()
 {
+	dummy_indices.clear ();
 	bool input_found = false;
 	bool output_found = false;
 	unsigned num_ports = slv2_plugin_get_num_ports (plugin);
@@ -71,17 +74,21 @@ Lv2Plugin::init_params_from_plugin ()
 				if (!input_found) {
 					in_port_index = i;
 					input_found = true;
+				} else {
+					dummy_indices.push_back (i);
 				}
-				std::cerr << "found input" << std::endl;
 			} else if (slv2_port_is_a (plugin, port, world.control_class)) {
 				add_parameter_from_port (i, port);
 			}
 		} else if (slv2_port_is_a (plugin, port, world.output_class)) {
-			if (!output_found && slv2_port_is_a (plugin, port, world.audio_class)) {
-				out_port_index = i;
-				output_found = true;
+			if (slv2_port_is_a (plugin, port, world.audio_class)) {
+				if (!output_found) {
+					out_port_index = i;
+					output_found = true;
+				} else {
+					dummy_indices.push_back (i);
+				}
 			}
-			std::cerr << "found output" << std::endl;
 		}
 	}
 	
@@ -135,6 +142,17 @@ Lv2Plugin::value_as_float (SLV2Value val)
 	float ret = val ? slv2_value_as_float (val) : 0.0;
 	slv2_value_free(val);
 	return ret;
+}
+
+void
+Lv2Plugin::ensure_dummy_buffer (unsigned buffer_size)
+{
+	if (dummy_buffer.size() >= buffer_size) { return; }
+	
+	dummy_buffer.resize (buffer_size);
+	for (std::vector<unsigned>::const_iterator it = dummy_indices.begin(); it != dummy_indices.end(); ++it) {
+		slv2_instance_connect_port (instance, *it, &dummy_buffer[0]);
+	}
 }
 
 } // namespace ReverbTuner

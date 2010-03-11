@@ -5,8 +5,7 @@
 
 namespace ReverbTuner {
 
-DataSource::DataSource (std::string const & dry_filefilename, std::string const & target_filefilename, Plugin & plugin)
-  : plugin (plugin)
+DataSource::DataSource (std::string const & dry_filefilename, std::string const & target_filefilename)
 {
 	SndfileHandle dry_file (dry_filefilename);
 	SndfileHandle target_file (target_filefilename);

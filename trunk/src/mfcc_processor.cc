@@ -1,5 +1,7 @@
 #include "reverbtuner/mfcc_processor.h"
 
+#include <iostream>
+
 namespace ReverbTuner {
 
 MfccProcessor::MfccProcessor(unsigned buffer_size, unsigned hop_size, unsigned filters, unsigned coefs, unsigned samplerate)

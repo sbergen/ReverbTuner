@@ -9,7 +9,7 @@
 
 namespace ReverbTuner {
 
-const int MfccEvaluator::mfcc_coefs = 26;
+const int MfccEvaluator::mfcc_coefs = 40; // Aubio currently only supports 40 bands
 const int MfccEvaluator::mfcc_buffer_size = 2048;
 const int MfccEvaluator::mfcc_hop_size = 1024;
 
@@ -20,7 +20,7 @@ const MfccEvaluator::Data MfccEvaluator::zero_buffer = MfccEvaluator::Data (mfcc
 
 MfccEvaluator::MfccEvaluator (DataSource const & data_source)
   : Evaluator (data_source)
-  , plugin (data_source.get_plugin().clone())
+  , plugin (data_source.get_plugin()->clone())
   , processor (mfcc_buffer_size, mfcc_hop_size, mfcc_coefs, mfcc_coefs, data_source.get_samplerate())
 {
 	analysis_buffer.resize (mfcc_buffer_size);
@@ -100,7 +100,7 @@ MfccEvaluator::run_mfcc (Data const & in, CoefData & result, unsigned frames, bo
 	
 	// Then zero-pad last buffer that contains data
 	std::fill (analysis_buffer.begin(), analysis_buffer.end(), 0.0);
-	std::copy (&in[position], &in[frames], analysis_buffer.begin());
+	std::copy (&in[position], &in[in.size()], analysis_buffer.begin());
 	if (run_plugin) {
 		plugin->run (&analysis_buffer[0], &analysis_buffer[0], mfcc_buffer_size);
 		processor.run (&analysis_buffer[0], &result[round][0]);
