@@ -125,8 +125,7 @@ Lv2Plugin::add_parameter_from_port (unsigned index, SLV2Port port)
 	float def_value = value_as_float (def);
 	
 	// Generate parameter
-	ParameterSet::Container & params = param_set.data();
-	params.insert (index,
+	param_set.add_parameter (index,
 		new Parameter (
 			type,
 			def_value,

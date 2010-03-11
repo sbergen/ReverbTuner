@@ -21,7 +21,7 @@ class EvaluationSet
 	EvaluationSet (ParameterSet const & param_set);
 	~EvaluationSet ();
 
-	bool resize (unsigned new_size);
+	void resize (unsigned new_size);
 	
 	void go_to_first () const;
 	

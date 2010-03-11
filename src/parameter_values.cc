@@ -7,8 +7,7 @@ namespace ReverbTuner {
 ParameterValues::ParameterValues (ParameterSet const & set)
   : set (set)
 {
-	ParameterSet::Container const & data = set.data ();
-	for (ParameterSet::Container::const_iterator it = data.begin(); it != data.end(); ++it) {
+	for (ParameterSet::Container::const_iterator it = set.begin(); it != set.end(); ++it) {
 		values[it->first] = it->second->get_default ();
 	}
 }
@@ -20,6 +19,7 @@ ParameterValues::operator= (ParameterValues const & other)
 	for (Values::const_iterator it = other.values.begin(); it != other.values.end(); ++it) {
 		values[it->first] = it->second;
 	}
+	return *this;
 }
 	
 float &

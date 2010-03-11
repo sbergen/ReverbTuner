@@ -4,22 +4,22 @@
 #include <boost/shared_ptr.hpp>
 
 #include "evaluation_scheduler.h"
+#include "evaluation_set.h"
+#include "parameter_values.h"
 
 namespace ReverbTuner {
 
 template<typename EvaluatorType>
-class SingleThreadedScheduler : public EvaluationScheduler<EvaluatorType>
+class SingleThreadedScheduler : public EvaluationScheduler
 {
-	typedef EvaluationScheduler<EvaluatorType> Parent;
-
   public:
 	SingleThreadedScheduler (DataSource const & data_source)
-	  : Parent (data_source) {}
+	  : EvaluationScheduler (data_source) {}
 	~SingleThreadedScheduler () {}
 	
 	void alloc_resources (unsigned /*amount*/)
 	{
-		evaluator.reset (new EvaluatorType (Parent::data_source));
+		evaluator.reset (new EvaluatorType (data_source));
 	}
 	
 	void evaluate (EvaluationSet const & set)

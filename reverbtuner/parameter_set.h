@@ -15,8 +15,13 @@ class ParameterSet
 	
 	typedef boost::ptr_map<unsigned, Parameter> Container;
 	
-	Container const & data() const { return parameters; }
-	Container & data() { return parameters; }
+	Container::const_iterator begin () const { return parameters.begin(); }
+	Container::const_iterator end () const { return parameters.end(); }
+	Container::const_iterator find (unsigned i) const { return parameters.find (i); }
+	
+	/// Takes ownership of \a parameter
+	void add_parameter (unsigned index, Parameter * parameter)
+		{ parameters.insert (index, parameter); }
 	
 	unsigned index_of_parameter (Parameter const * parameter) const
 	{

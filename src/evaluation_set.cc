@@ -5,15 +5,13 @@ namespace ReverbTuner {
 EvaluationSet::EvaluationSet (ParameterSet const & param_set)
   : param_set (param_set)
 {
-	
 }
 
 EvaluationSet::~EvaluationSet ()
 {
-	
 }
 
-bool
+void
 EvaluationSet::resize (unsigned new_size)
 {
 	LockGuard lock (data_mutex);
@@ -43,10 +41,13 @@ EvaluationSet::next_pair (ParameterValues const *& parameters, EvaluationResult 
 bool
 EvaluationSet::next_pair (ParameterValues *& parameters, EvaluationResult *& result)
 {
+	if (current_item == data.end()) { return false; }
+	
 	LockGuard lock (data_mutex);
 	DataContainer::iterator it = current_item++;
 	parameters = &it->parameters;
 	result = &it->result;
+	return true;
 }
 
 } // namespace ReverbTuner
