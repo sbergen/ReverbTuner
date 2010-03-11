@@ -27,6 +27,7 @@ def configure(conf):
 	
 	# Boost headers
 	autowaf.check_header(conf, 'boost/ptr_container/ptr_map.hpp', mandatory=True)
+	autowaf.check_header(conf, 'boost/shared_ptr.hpp', mandatory=True)
 
 def build(bld):
 

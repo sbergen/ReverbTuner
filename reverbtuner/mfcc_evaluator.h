@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <boost/shared_ptr.hpp>
+
 #include "reverbtuner/evaluator.h"
 #include "reverbtuner/mfcc_processor.h"
 
@@ -17,7 +19,7 @@ class MfccEvaluator : public Evaluator
 	MfccEvaluator (DataSource const & data_source);
 	~MfccEvaluator ();
 
-	void evaluate_parameters (ParameterValues const & parameters, EvaluationResult const & result);
+	void evaluate_parameters (ParameterValues const & parameters, EvaluationResult & result);
 
   private:
 	
@@ -27,8 +29,9 @@ class MfccEvaluator : public Evaluator
 	void init_static_data (DataSource const & data_source);
 	void init_coef_data (CoefData & data);
 	void run_mfcc (Data const & in, CoefData & result, unsigned frames, bool run_plugin);
+	float euclidean_distance (Data const & a, Data const & b);
 	
-	Plugin & plugin;
+	boost::shared_ptr<Plugin> plugin;
 	MfccProcessor processor;
 	
 	Data analysis_buffer;

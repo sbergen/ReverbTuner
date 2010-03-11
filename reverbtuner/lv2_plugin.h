@@ -18,7 +18,7 @@ class Lv2Plugin : public Plugin
 	Lv2Plugin (Lv2World & world, SLV2Plugin plugin);
 	~Lv2Plugin();
 	
-	Plugin * clone() const;
+	PluginPtr clone() const;
 	void reset ();
 	void run (float const * in, float * out, unsigned frames);
 	void apply_parameters (ParameterValues const & params);

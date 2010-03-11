@@ -29,11 +29,11 @@ Lv2PluginFactory::plugin_name (unsigned index)
 	return str;
 }
 
-Lv2Plugin *
+boost::shared_ptr<Lv2Plugin>
 Lv2PluginFactory::plugin (unsigned index)
 {
 	SLV2Plugin plugin = slv2_plugins_get_at (world.plugins, index);
-	return new Lv2Plugin (world, plugin);
+	return boost::shared_ptr<Lv2Plugin> (new Lv2Plugin (world, plugin));
 }
 
 

@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <boost/shared_ptr.hpp>
+
 using namespace ReverbTuner;
 
 int main ()
@@ -25,7 +27,5 @@ int main ()
 		std::cin >> which;
 	} while (which > count);
 	
-	Lv2Plugin * plugin = factory.plugin (which);
-	
-	delete plugin;
+	boost::shared_ptr<Lv2Plugin> plugin = factory.plugin (which);
 }
