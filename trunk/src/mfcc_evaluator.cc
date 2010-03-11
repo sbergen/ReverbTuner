@@ -49,7 +49,8 @@ MfccEvaluator::evaluate_parameters (ParameterValues const & parameters, Evaluati
 		sum += euclidean_distance (*t_it, *r_it);
 	}
 	
-	result = EvaluationResult (sum);
+	// Sum is > 0, the smaller the better, so make it negative
+	result = EvaluationResult (-sum);
 }
 
 void
