@@ -88,7 +88,7 @@ MfccEvaluator::run_mfcc (Data const & in, CoefData & result, unsigned frames, bo
 	if (run_plugin) { plugin->reset(); }
 	
 	// First run whole frames of data (in place)
-	while ((data_frames - position) > mfcc_buffer_size) {
+	while ((data_frames - position) > static_cast<long> (mfcc_buffer_size)) {
 		if (run_plugin) {
 			plugin->run (&in[position], &analysis_buffer[0], mfcc_buffer_size);
 			processor.run (&analysis_buffer[0], &result[round][0]);

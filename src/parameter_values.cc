@@ -8,7 +8,7 @@ ParameterValues::ParameterValues (ParameterSet const & set)
   : set (set)
 {
 	for (ParameterSet::Container::const_iterator it = set.begin(); it != set.end(); ++it) {
-		values[it->first] = it->second->get_default ();
+		values[it->first] = it->second->def ();
 	}
 }
 

@@ -17,25 +17,23 @@ class Parameter
 	};
 	
 	Parameter (Type type, float default_value, float min_value, float max_value)
-	  : type (type)
-	  , min_value (min_value)
-	  , max_value (max_value)
-	  , default_value (default_value)
+	  : _type (type)
+	  , _min_value (min_value)
+	  , _max_value (max_value)
+	  , _default_value (default_value)
 	{}
 	
-	void make_valid (float & value) const { clamp (value, min_value, max_value); }
-	
-	Type get_type () const { return type; }
-	float get_minimum () const { return min_value; }
-	float get_maximum () const { return max_value; }
-	float get_default () const { return default_value; }
+	Type type () const { return _type; }
+	float min () const { return _min_value; }
+	float max () const { return _max_value; }
+	float def () const { return _default_value; }
 	
   private:
 	
-	Type  type;
-	float min_value;
-	float max_value;
-	float default_value;
+	Type  _type;
+	float _min_value;
+	float _max_value;
+	float _default_value;
 };
 
 } // namespace ReverbTuner
