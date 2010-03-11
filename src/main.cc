@@ -47,7 +47,7 @@ int main ()
 	boost::shared_ptr<Lv2Plugin> plugin = factory.plugin (which);
 	data_source.set_plugin (plugin);
 	
-	std::cout << "Instantiating evaluator" << std::endl;
+	std::cout << "Instantiating evaluator for plugin \"" << factory.plugin_name (which) << "\"" << std::endl;
 	
 	MfccEvaluator evaluator (data_source);
 	ParameterValues values (plugin->get_parameters());

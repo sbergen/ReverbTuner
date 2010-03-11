@@ -32,7 +32,7 @@ class Lv2Plugin : public Plugin
 	void add_parameter_from_port (unsigned index, SLV2Port port);
 	float value_as_float (SLV2Value val);
 	
-	void ensure_dummy_buffer (unsigned buffer_size);
+	void ensure_dummy_buffers (unsigned buffer_size);
 	
 	Lv2World & world;
 	SLV2Plugin plugin;
@@ -41,8 +41,10 @@ class Lv2Plugin : public Plugin
 	unsigned in_port_index;
 	unsigned out_port_index;
 	
-	std::vector<unsigned> dummy_indices;
-	std::vector<float> dummy_buffer;
+	std::vector<unsigned> dummy_in_indices;
+	std::vector<unsigned> dummy_out_indices;
+	std::vector<float> dummy_in_buffer;
+	std::vector<float> dummy_out_buffer;
 	
 	ParameterSet    param_set;
 	ParameterValues param_vals;
