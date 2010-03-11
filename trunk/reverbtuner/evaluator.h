@@ -20,7 +20,7 @@ class Evaluator
 	  * \param parameters The parameter set to evaluate
 	  * \param result Result stucutre into which the result is stored
 	  */
-	virtual void evaluate_parameters (ParameterValues const & parameters, EvaluationResult const & result) = 0;
+	virtual void evaluate_parameters (ParameterValues const & parameters, EvaluationResult & result) = 0;
 
   protected:
 	DataSource const & data_source;

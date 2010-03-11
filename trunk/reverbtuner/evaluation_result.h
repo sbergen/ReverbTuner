@@ -6,7 +6,8 @@ namespace ReverbTuner {
 /// Currently the result is only a floating point value
 struct EvaluationResult
 {
-	EvaluationResult () : value(0.0) {}
+	EvaluationResult () : value (0.0) {}
+	EvaluationResult (float value) : value (value) {}
 	// Comparison etc.
 	operator float() { return value; }
 

@@ -22,10 +22,10 @@ Lv2Plugin::~Lv2Plugin()
 }
 
 
-Plugin *
+PluginPtr
 Lv2Plugin::clone() const
 {
-	return new Lv2Plugin (world, plugin);
+	return PluginPtr (new Lv2Plugin (world, plugin));
 }
 
 void

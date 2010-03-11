@@ -1,9 +1,11 @@
 #include "reverbtuner/mfcc_evaluator.h"
 
 #include <algorithm>
+#include <cmath>
 
 #include "reverbtuner/data_source.h"
 #include "reverbtuner/plugin.h"
+#include "reverbtuner/evaluation_result.h"
 
 namespace ReverbTuner {
 
@@ -18,7 +20,7 @@ const MfccEvaluator::Data MfccEvaluator::zero_buffer = MfccEvaluator::Data (mfcc
 
 MfccEvaluator::MfccEvaluator (DataSource const & data_source)
   : Evaluator (data_source)
-  , plugin (*data_source.get_plugin().clone())
+  , plugin (data_source.get_plugin().clone())
   , processor (mfcc_buffer_size, mfcc_hop_size, mfcc_coefs, mfcc_coefs, data_source.get_samplerate())
 {
 	analysis_buffer.resize (mfcc_buffer_size);
@@ -32,21 +34,22 @@ MfccEvaluator::MfccEvaluator (DataSource const & data_source)
 
 MfccEvaluator::~MfccEvaluator ()
 {
-	delete &plugin;
 }
 
 void
-MfccEvaluator::evaluate_parameters (ParameterValues const & parameters, EvaluationResult const & result)
+MfccEvaluator::evaluate_parameters (ParameterValues const & parameters, EvaluationResult & result)
 {
-	plugin.apply_parameters (parameters);
-	
-	unsigned position = 0;
-	unsigned buffer = 0;
-	
+	plugin->apply_parameters (parameters);
 	DataSource::Data const & data = data_source.get_dry_data();
 	run_mfcc (data, result_coefs, target_length, true);
 	
-	// TODO calclulate result
+	float sum = 0.0;
+	CoefData::const_iterator t_it, r_it;
+	for (t_it = target_coefs.begin(), r_it = result_coefs.begin(); t_it != target_coefs.end() && r_it != result_coefs.end(); ++t_it, ++r_it) {
+		sum += euclidean_distance (*t_it, *r_it);
+	}
+	
+	result = EvaluationResult (sum);
 }
 
 void
@@ -81,12 +84,12 @@ MfccEvaluator::run_mfcc (Data const & in, CoefData & result, unsigned frames, bo
 	unsigned position = 0;
 	unsigned round = 0;
 	
-	if (run_plugin) { plugin.reset(); }
+	if (run_plugin) { plugin->reset(); }
 	
 	// First run whole frames of data (in place)
 	while ((data_frames - position) > mfcc_buffer_size) {
 		if (run_plugin) {
-			plugin.run (&in[position], &analysis_buffer[0], mfcc_buffer_size);
+			plugin->run (&in[position], &analysis_buffer[0], mfcc_buffer_size);
 			processor.run (&analysis_buffer[0], &result[round][0]);
 		} else {
 			processor.run (&in[position], &result[round][0]);
@@ -99,7 +102,7 @@ MfccEvaluator::run_mfcc (Data const & in, CoefData & result, unsigned frames, bo
 	std::fill (analysis_buffer.begin(), analysis_buffer.end(), 0.0);
 	std::copy (&in[position], &in[frames], analysis_buffer.begin());
 	if (run_plugin) {
-		plugin.run (&analysis_buffer[0], &analysis_buffer[0], mfcc_buffer_size);
+		plugin->run (&analysis_buffer[0], &analysis_buffer[0], mfcc_buffer_size);
 		processor.run (&analysis_buffer[0], &result[round][0]);
 	} else {
 		processor.run (&analysis_buffer[0], &result[round][0]);
@@ -110,7 +113,7 @@ MfccEvaluator::run_mfcc (Data const & in, CoefData & result, unsigned frames, bo
 	// And finally run zeros until done
 	while (position < frames) {
 		if (run_plugin) {
-			plugin.run (&zero_buffer[0], &analysis_buffer[0], mfcc_buffer_size);
+			plugin->run (&zero_buffer[0], &analysis_buffer[0], mfcc_buffer_size);
 			processor.run (&analysis_buffer[0], &result[round][0]);
 		} else {
 			processor.run (&zero_buffer[0], &result[round][0]);
@@ -118,6 +121,19 @@ MfccEvaluator::run_mfcc (Data const & in, CoefData & result, unsigned frames, bo
 		position += mfcc_buffer_size;
 		round++;
 	}
+}
+
+float
+MfccEvaluator::euclidean_distance (Data const & a, Data const & b)
+{
+	Data::const_iterator a_it, b_it;
+	float sum = 0.0;
+	
+	for (a_it = a.begin(), b_it = b.begin(); a_it != a.end() && b_it != b.end(); ++a_it, ++b_it) {
+		sum += powf ((*a_it - *b_it), 2);
+	}
+	
+	return sqrt (sum);
 }
 
 } // namespace ReverbTuner

@@ -1,10 +1,15 @@
 #ifndef REVERB_TUNER_PLUGIN_H
 #define REVERB_TUNER_PLUGIN_H
 
+#include <boost/shared_ptr.hpp>
+
 namespace ReverbTuner {
 
 class ParameterValues;
 class ParameterSet;
+
+class Plugin;
+typedef boost::shared_ptr<Plugin> PluginPtr;
 
 class Plugin
 {
@@ -12,7 +17,7 @@ class Plugin
 
 	virtual ~Plugin() {}
 	
-	virtual Plugin * clone() const = 0;
+	virtual PluginPtr clone() const = 0;
 	virtual void reset () = 0;
 	virtual void run (float const * in, float * out, unsigned frames) = 0;
 	virtual void apply_parameters (ParameterValues const & parameters) = 0;
