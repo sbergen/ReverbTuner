@@ -35,9 +35,9 @@ class ParameterSet
 		throw std::invalid_argument ("ParameterSet does not have given parameter");
 	}
 	
-	unsigned index_from_random_number (unsigned random) const
+	unsigned random_index (RandomGenerator & rg) const
 	{
-		return random_from_container (parameters, random)->first;
+		return random_from_container (parameters, rg)->first;
 	}
 	
   private:

@@ -1,22 +1,16 @@
 #include "reverbtuner/parameter_modifier.h"
 
-#include <ctime>
-
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/triangle_distribution.hpp>
-#include <boost/random/uniform_smallint.hpp>
-
 #include "reverbtuner/parameter.h"
 #include "reverbtuner/parameter_set.h"
+#include "reverbtuner/random_generator.h"
 
 #include <iostream>
 
 namespace ReverbTuner {
 
-ParameterModifier::ParameterModifier(double samplerate)
+ParameterModifier::ParameterModifier(double samplerate, RandomGenerator & rg)
   : samplerate (samplerate)
-  , rng (std::time (0))
-  , uniform_generator (rng, uniform_dist)
+  , rg (rg)
 {
 
 }
@@ -24,16 +18,14 @@ ParameterModifier::ParameterModifier(double samplerate)
 void
 ParameterModifier::randomize_uniform (float & value, Parameter const & param)
 {
-	boost::uniform_real<float> distribution (param.min (), param.max ());
-	value = distribution (rng);
+	value = rg.random_uniform (param.min (), param.max ());
 	make_valid (value, param);
 }
 
 void
 ParameterModifier::randomize_triangular (float & value, Parameter const & param)
 {
-	boost::triangle_distribution<float> distribution (param.min (), param.def (), param.max ());
-	value = distribution (uniform_generator);
+	value =  rg.random_triangular (param.min (), param.def (), param.max ());
 	make_valid (value, param);
 }
 
@@ -46,7 +38,8 @@ ParameterModifier::make_valid (float & value, Parameter const & param)
 			// Do nothing
 			break;
 		case Parameter::TypeInteger:
-			value = static_cast<int> (value);
+			// Proper rounding with + 0.5
+			value = static_cast<int> (value + 0.5);
 			break;
 		case Parameter::TypeToggled:
 			value = (value > 0.5);
@@ -57,17 +50,5 @@ ParameterModifier::make_valid (float & value, Parameter const & param)
 	}
 }
 
-unsigned
-ParameterModifier::random_with_max_value (unsigned max)
-{
-	boost::uniform_smallint<unsigned> distribution (0, max);
-	return distribution (rng);
-}
-
-unsigned
-ParameterModifier::random_index (ParameterSet const & set)
-{
-	return set.index_from_random_number (rng ());
-}
 
 } // namespace ReverbTuner

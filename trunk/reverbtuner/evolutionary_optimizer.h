@@ -14,7 +14,7 @@ class EvaluationScheduler;
 class EvolutionaryOptimizer
 {
   public:
-	EvolutionaryOptimizer (DataSource const & data_source, EvaluationScheduler & scheduler);
+	EvolutionaryOptimizer (DataSource const & data_source, EvaluationScheduler & scheduler, RandomGenerator & rg);
 	~EvolutionaryOptimizer ();
 
 	void run ();
@@ -36,6 +36,7 @@ class EvolutionaryOptimizer
   private: // Main data
 	DataSource const & data_source;
 	EvaluationScheduler & scheduler;
+	RandomGenerator & rg;
 	
 	EvaluationSet evaluation_set;
 	ParameterModifier param_modifier;

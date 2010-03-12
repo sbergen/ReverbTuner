@@ -4,6 +4,7 @@
 #include "reverbtuner/mfcc_evaluator.h"
 #include "reverbtuner/single_threaded_scheduler.h"
 #include "reverbtuner/evolutionary_optimizer.h"
+#include "reverbtuner/random_generator.h"
 
 #include <iostream>
 
@@ -51,7 +52,8 @@ int main ()
 	
 	SingleThreadedScheduler<MfccEvaluator> scheduler (data_source);
 	scheduler.alloc_resources (1);
-	EvolutionaryOptimizer optimizer (data_source, scheduler);
+	RandomGenerator rg;
+	EvolutionaryOptimizer optimizer (data_source, scheduler, rg);
 	
 	std::cout << "Running evaluator.." << std::endl;
 	

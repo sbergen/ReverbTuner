@@ -10,16 +10,18 @@
 #include "reverbtuner/plugin.h"
 #include "reverbtuner/parameter_set.h"
 #include "reverbtuner/utils.h"
+#include "reverbtuner/random_generator.h"
 
 #include <iostream>
 
 namespace ReverbTuner {
 
-EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, EvaluationScheduler & scheduler)
-  :	 data_source (data_source)
+EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, EvaluationScheduler & scheduler, RandomGenerator & rg)
+  : data_source (data_source)
   , scheduler (scheduler)
+  , rg (rg)
   , evaluation_set (data_source.get_plugin()->get_parameters())
-  , param_modifier (data_source.get_samplerate())
+  , param_modifier (data_source.get_samplerate(), rg)
   , rounds (2)
   , population_size (200)
   , best_selection_size (5)
@@ -66,7 +68,7 @@ EvolutionaryOptimizer::initialize_set ()
 void
 EvolutionaryOptimizer::randomize_all_values (ParameterValues & values)
 {
-	bool const triangular = param_modifier.random_bool ();
+	bool const triangular = rg.random_bool ();
 	ParameterSet const & set = values.get_set ();
 	for (ParameterSet::iterator it = set.begin (); it != set.end (); ++it) {
 		if (triangular) {
@@ -80,7 +82,7 @@ EvolutionaryOptimizer::randomize_all_values (ParameterValues & values)
 void
 EvolutionaryOptimizer::mutate_one (ParameterValues & values)
 {
-	unsigned index = param_modifier.random_index (values.get_set ());
+	unsigned index = values.get_set ().random_index (rg);
 	// iterator is guaranteed to be valid
 	ParameterSet::iterator it = values.get_set ().find (index);
 	param_modifier.randomize_uniform (values[index], *it->second);
@@ -126,7 +128,7 @@ void
 EvolutionaryOptimizer::select_random ()
 {
 	for (unsigned i = 0; i < random_selection_size; ++i) {
-		ResultMap::iterator it = random_from_container (all_results, param_modifier.random_uint());
+		ResultMap::iterator it = random_from_container (all_results, rg);
 		selected_results[it->first] = it->second;
 		all_results.erase (it);
 	}
@@ -135,7 +137,7 @@ EvolutionaryOptimizer::select_random ()
 ParameterValues const *
 EvolutionaryOptimizer::random_from_selected ()
 {
-	return random_from_container (selected_results, param_modifier.random_uint())->second;
+	return random_from_container (selected_results, rg)->second;
 }
 
 } // namespace ReverbTuner
