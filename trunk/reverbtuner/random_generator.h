@@ -26,7 +26,7 @@ class RandomGenerator
 	float random_triangular (float min, float med, float max)
 		{ return boost::triangle_distribution<float> (min, med, max) (uniform_generator); }
 	unsigned random_less_than (unsigned max)
-		{ return boost::uniform_smallint<unsigned> (0, max) (rng); }
+		{ return boost::uniform_smallint<unsigned> (0, max - 1) (rng); }
 	
 	bool random_bool () { return uniform_generator() < 0.5; }
 	unsigned random_uint () { return rng(); }

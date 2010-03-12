@@ -19,7 +19,7 @@ void clamp (T & val, T const & min, T const & max)
 template<typename Container>
 typename Container::iterator random_from_container (Container & container, RandomGenerator & rg)
 {
-	typename Container::size_type index = rg.random_less_than ( container.size () - 1);
+	typename Container::size_type index = rg.random_less_than (container.size ());
 	typename Container::iterator it = container.begin ();
 	std::advance (it, index);
 	return it;

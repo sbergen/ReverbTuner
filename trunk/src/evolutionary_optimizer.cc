@@ -4,6 +4,8 @@
 #include <limits>
 #include <set>
 
+#include <boost/assign/ptr_map_inserter.hpp>
+
 #include "reverbtuner/data_source.h"
 #include "reverbtuner/evaluation_result.h"
 #include "reverbtuner/evaluation_scheduler.h"
@@ -22,11 +24,13 @@ EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, Ev
   , rg (rg)
   , evaluation_set (data_source.get_plugin()->get_parameters())
   , param_modifier (data_source.get_samplerate(), rg)
-  , rounds (2)
+  , best_value (-std::numeric_limits<float>::infinity())
+  , rounds (10)
   , population_size (200)
   , best_selection_size (5)
   , random_selection_size (3)
   , number_of_parents (2)
+  , maximum_mutations (2)
 {
 }
 
@@ -43,8 +47,10 @@ EvolutionaryOptimizer::run ()
 	for (unsigned i = 0; i < rounds; ++i) {
 		scheduler.evaluate (evaluation_set);
 		results_into_map ();
+		store_best_result ();
 		select_best ();
 		select_random ();
+		reproduce_from_selected ();
 	}
 }
 
@@ -80,6 +86,15 @@ EvolutionaryOptimizer::randomize_all_values (ParameterValues & values)
 }
 
 void
+EvolutionaryOptimizer::mutate (ParameterValues & values)
+{
+	unsigned mutations = rg.random_less_than (maximum_mutations + 1);
+	for (unsigned i = 0; i < mutations; ++i) {
+		mutate_one (values);
+	}
+}
+
+void
 EvolutionaryOptimizer::mutate_one (ParameterValues & values)
 {
 	unsigned index = values.get_set ().random_index (rg);
@@ -97,17 +112,22 @@ EvolutionaryOptimizer::cross_over_from_selected (ParameterValues & values)
 		parents.insert (random_from_selected ());
 	}
 	
-	// 
-	
+	// Set values
+	for (ParameterValues::iterator it = values.begin(); it != values.end(); ++it) {
+		unsigned index = it->first;
+		values[index] = (**random_from_container (parents, rg))[index];
+	}
 }
 
 void
 EvolutionaryOptimizer::results_into_map ()
 {
+	all_results.clear ();
+	selected_results.clear();
+	
 	ParameterValues const * parameters;
 	EvaluationResult * result;
 	
-	all_results.clear ();
 	evaluation_set.go_to_first ();
 	while (evaluation_set.next_pair (parameters, result)) {
 		all_results[*result] = parameters;
@@ -115,11 +135,19 @@ EvolutionaryOptimizer::results_into_map ()
 }
 
 void
+EvolutionaryOptimizer::store_best_result ()
+{
+	float this_time_best = (--all_results.end())->first;
+	best_value = std::max (best_value, this_time_best);
+	std::cout << "Best for round: " << this_time_best << std::endl;
+}
+
+void
 EvolutionaryOptimizer::select_best ()
 {
 	for (unsigned i = 0; i < best_selection_size; ++i) {
 		ResultMap::iterator it = --all_results.end ();
-		selected_results[it->first] = it->second;
+		boost::assign::ptr_map_insert (selected_results) (it->first, *it->second);
 		all_results.erase (it);
 	}
 }
@@ -129,7 +157,7 @@ EvolutionaryOptimizer::select_random ()
 {
 	for (unsigned i = 0; i < random_selection_size; ++i) {
 		ResultMap::iterator it = random_from_container (all_results, rg);
-		selected_results[it->first] = it->second;
+		boost::assign::ptr_map_insert (selected_results) (it->first, *it->second);
 		all_results.erase (it);
 	}
 }
@@ -139,5 +167,19 @@ EvolutionaryOptimizer::random_from_selected ()
 {
 	return random_from_container (selected_results, rg)->second;
 }
+
+void
+EvolutionaryOptimizer::reproduce_from_selected ()
+{
+	ParameterValues * parameters;
+	EvaluationResult * result;
+	
+	evaluation_set.go_to_first();
+	while (evaluation_set.next_pair (parameters, result)) {
+		cross_over_from_selected (*parameters);
+		mutate (*parameters);
+	}
+}
+
 
 } // namespace ReverbTuner
