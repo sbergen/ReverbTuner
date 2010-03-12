@@ -7,6 +7,8 @@
 #include "evaluation_set.h"
 #include "parameter_values.h"
 
+#include <iostream>
+
 namespace ReverbTuner {
 
 template<typename EvaluatorType>
@@ -30,6 +32,7 @@ class SingleThreadedScheduler : public EvaluationScheduler
 		set.go_to_first ();
 		while (set.next_pair (parameters, result)) {
 			evaluator->evaluate_parameters (*parameters, *result);
+			std::cout << "Got value: " << (float) *result << std::endl;
 		}
 	}
 	

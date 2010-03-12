@@ -3,6 +3,7 @@
 #include "reverbtuner/data_source.h"
 #include "reverbtuner/mfcc_evaluator.h"
 #include "reverbtuner/single_threaded_scheduler.h"
+#include "reverbtuner/evolutionary_optimizer.h"
 
 #include <iostream>
 
@@ -49,17 +50,12 @@ int main ()
 	std::cout << "Instantiating evaluator for plugin \"" << factory.plugin_name (which) << "\"" << std::endl;
 	
 	SingleThreadedScheduler<MfccEvaluator> scheduler (data_source);
-	EvaluationSet set (plugin->get_parameters());
-	set.resize (1);
-	
-	//ParameterValues values (plugin->get_parameters());
-	//EvaluationResult result;
+	scheduler.alloc_resources (1);
+	EvolutionaryOptimizer optimizer (data_source, scheduler);
 	
 	std::cout << "Running evaluator.." << std::endl;
 	
-	scheduler.evaluate (set);
-	
-	//std::cout << "Got result: " << (float) result << std::endl;
+	optimizer.run();
 	
 	std::cout << "Done!" << std::endl;
 }
