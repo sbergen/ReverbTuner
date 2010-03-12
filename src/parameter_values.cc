@@ -12,6 +12,12 @@ ParameterValues::ParameterValues (ParameterSet const & set)
 	}
 }
 
+ParameterValues::ParameterValues (ParameterValues const & other)
+  : set (other.set)
+{
+	*this = other;
+}
+
 ParameterValues &
 ParameterValues::operator= (ParameterValues const & other)
 {
