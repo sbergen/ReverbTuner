@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # Waf utilities for easily building standard unixey packages/libraries
 # Licensed under the GNU GPL v2 or later, see COPYING file for details.
 # Copyright (C) 2008 Dave Robillard
@@ -11,6 +10,7 @@ import Configure
 import Options
 import Utils
 import sys
+import glob
 from TaskGen import feature, before, after
 
 global g_is_child
@@ -131,6 +131,7 @@ def configure(conf):
 	conf.env['DEBUG'] = Options.options.debug
 	conf.env['STRICT'] = Options.options.strict
 	conf.env['PREFIX'] = os.path.abspath(os.path.expanduser(os.path.normpath(conf.env['PREFIX'])))
+
 	if Options.options.bundle:
 		conf.env['BUNDLE'] = True
 		conf.define('BUNDLE', 1)
@@ -198,8 +199,8 @@ def configure(conf):
 		append_cxx_flags('-DNDEBUG')
 	if Options.options.strict:
 		conf.env.append_value('CCFLAGS', [ '-std=c99', '-pedantic' ])
-		conf.env.append_value('CXXFLAGS', [ '-ansi'])
-		append_cxx_flags('-Wall -Wextra -Wno-unused-parameter -Woverloaded-virtual')
+		conf.env.append_value('CXXFLAGS', [ '-ansi', '-Woverloaded-virtual'])
+		append_cxx_flags('-Wall -Wextra -Wno-unused-parameter')
 	append_cxx_flags('-fPIC -DPIC -fshow-column')
 	g_step = 2
 	
@@ -365,6 +366,43 @@ def build_version_files(header_path, source_path, domain, major, minor, micro):
 		sys.exit(-1)
 		
 	return None
+
+# Internationalisation (gettext)
+def build_i18n(bld,dir,name,sources):
+	pwd = bld.get_curdir()
+	os.chdir(pwd)
+
+	pot_file = '%s.pot' % name
+
+	args = [ 'xgettext',
+		 '--keyword=_',
+		 '--keyword=N_',
+		 '--from-code=UTF-8',
+		 '-o', pot_file,
+		 '--copyright-holder="Paul Davis"' ]
+	args += sources
+	Utils.pprint('GREEN', 'Updating ' + pot_file, sep='')
+	os.spawnvp (os.P_WAIT, 'xgettext', args)
+	
+	po_files = glob.glob ('po/*.po')
+	
+	for po_file in po_files:
+		args = [ 'msgmerge',
+			 '--update',
+			 po_file,
+			 pot_file ]
+		Utils.pprint('GREEN', 'Updating ' + po_file, sep='')
+		os.spawnvp (os.P_WAIT, 'msgmerge', args)
+		
+	for po_file in po_files:
+		mo_file = po_file.replace ('.po', '.mo')
+		args = [ 'msgfmt',
+			 '-c',
+			 '-o',
+			 mo_file,
+			 po_file ]
+		Utils.pprint('GREEN', 'Generating ' + po_file)
+		os.spawnvp (os.P_WAIT, 'msgfmt', args)
 
 def shutdown():
 	# This isn't really correct (for packaging), but people asking is annoying
