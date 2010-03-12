@@ -49,7 +49,7 @@ def build(bld):
 	'''
 	reverbtuner.includes     = '.'
 	reverbtuner.uselib       = 'SLV2 AUBIO SNDFILE'
-	reverbtuner.target       = 'reverbtuner'
+	reverbtuner.target       = 'reverbtune'
 	reverbtuner.install_path = ''
 
 def shutdown():
