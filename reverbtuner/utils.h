@@ -5,6 +5,7 @@
 #include <iterator>
 
 #include "parameter_modifier.h"
+#include "random_generator.h"
 
 namespace ReverbTuner {
 
@@ -16,18 +17,18 @@ void clamp (T & val, T const & min, T const & max)
 }
 
 template<typename Container>
-typename Container::iterator random_from_container (Container & container, unsigned random_uint)
+typename Container::iterator random_from_container (Container & container, RandomGenerator & rg)
 {
-	random_uint = random_uint % container.size ();
+	typename Container::size_type index = rg.random_less_than ( container.size () - 1);
 	typename Container::iterator it = container.begin ();
-	std::advance (it, random_uint);
+	std::advance (it, index);
 	return it;
 }
 
 template<typename Container>
-typename Container::const_iterator random_from_container (Container const & container, unsigned random_uint)
+typename Container::const_iterator random_from_container (Container const & container, RandomGenerator & rg)
 {
-	return random_from_container (const_cast<Container &> (container), random_uint);
+	return random_from_container (const_cast<Container &> (container), rg);
 }
 
 } // namespace ReverbTuner
