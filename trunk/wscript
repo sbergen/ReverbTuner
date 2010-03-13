@@ -26,11 +26,12 @@ def configure(conf):
 	autowaf.check_pkg(conf, 'sndfile', uselib_store='SNDFILE', atleast_version='1.0.17', mandatory=True)
 	
 	# Boost headers
-	autowaf.check_header(conf, 'boost/ptr_container/ptr_map.hpp', mandatory=True)
-	autowaf.check_header(conf, 'boost/ptr_container/ptr_list.hpp', mandatory=True)
+	autowaf.check_header(conf, 'boost/ptr_container/ptr_container.hpp', mandatory=True)
 	autowaf.check_header(conf, 'boost/thread.hpp', mandatory=True)
 	autowaf.check_header(conf, 'boost/shared_ptr.hpp', mandatory=True)
 	autowaf.check_header(conf, 'boost/random.hpp', mandatory=True)
+	
+	conf.env.append_value('LINKFLAGS', '-lboost_thread-mt')
 
 def build(bld):
 
@@ -38,7 +39,6 @@ def build(bld):
 	reverbtuner.source = '''
 		src/main.cc
 		src/data_source.cc
-		src/evaluation_set.cc
 		src/evolutionary_optimizer.cc
 		src/lv2_plugin.cc
 		src/lv2_plugin_factory.cc

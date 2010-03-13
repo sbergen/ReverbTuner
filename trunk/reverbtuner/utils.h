@@ -31,6 +31,14 @@ typename Container::const_iterator random_from_container (Container const & cont
 	return random_from_container (const_cast<Container &> (container), rg);
 }
 
+/// No-op "Lock" for single threaded contexts, which implements the boost Lockable concept
+struct DummyLock
+{
+	inline void lock() {}
+	inline bool try_lock() { return true; }
+	inline void unlock() {}
+};
+
 } // namespace ReverbTuner
 
 #endif // REVERB_TUNER_UTILS_H
