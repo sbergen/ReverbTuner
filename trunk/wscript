@@ -40,6 +40,7 @@ def build(bld):
 		src/main.cc
 		src/data_source.cc
 		src/evolutionary_optimizer.cc
+		src/evaluation_set.cc
 		src/lv2_plugin.cc
 		src/lv2_plugin_factory.cc
 		src/lv2_world.cc
