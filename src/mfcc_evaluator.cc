@@ -7,6 +7,8 @@
 #include "reverbtuner/plugin.h"
 #include "reverbtuner/evaluation_result.h"
 
+#include <iostream>
+
 namespace ReverbTuner {
 
 const int MfccEvaluator::mfcc_coefs = 40; // Aubio currently only supports 40 bands
@@ -23,6 +25,8 @@ MfccEvaluator::MfccEvaluator (DataSource const & data_source)
   , plugin (data_source.get_plugin()->clone())
   , processor (mfcc_buffer_size, mfcc_hop_size, mfcc_coefs, mfcc_coefs, data_source.get_samplerate())
 {
+	std::cout << "MfccEvaluator()" << std::endl;
+	
 	analysis_buffer.resize (mfcc_buffer_size);
 	
 	if (!static_init_done) {
@@ -34,6 +38,7 @@ MfccEvaluator::MfccEvaluator (DataSource const & data_source)
 
 MfccEvaluator::~MfccEvaluator ()
 {
+	std::cout << "~MfccEvaluator()" << std::endl;
 }
 
 void

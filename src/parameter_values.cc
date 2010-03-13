@@ -21,7 +21,6 @@ ParameterValues::ParameterValues (ParameterValues const & other)
 ParameterValues &
 ParameterValues::operator= (ParameterValues const & other)
 {
-	values.clear ();
 	for (Values::const_iterator it = other.values.begin(); it != other.values.end(); ++it) {
 		values[it->first] = it->second;
 	}
