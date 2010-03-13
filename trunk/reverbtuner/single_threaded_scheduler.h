@@ -19,7 +19,7 @@ class SingleThreadedScheduler : public EvaluationScheduler
 	  : EvaluationScheduler (data_source) {}
 	~SingleThreadedScheduler () {}
 	
-	void alloc_resources (unsigned /*amount*/)
+	void alloc_resources (unsigned amount = 1)
 	{
 		evaluator.reset (new EvaluatorType (data_source));
 	}

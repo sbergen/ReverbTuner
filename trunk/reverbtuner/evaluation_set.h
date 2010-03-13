@@ -30,6 +30,8 @@ class EvaluationSet
 		}
 	}
 	
+	unsigned size() { return data.size(); }
+	
 	void go_to_first () const { current_item = data.begin(); }
 	bool next_pair (ParameterValues const *& parameters, EvaluationResult *& result) const throw()
 	{

@@ -25,8 +25,11 @@ EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, Ev
   , evaluation_set (data_source.get_plugin()->get_parameters())
   , param_modifier (data_source.get_samplerate(), rg)
   , best_value (-std::numeric_limits<float>::infinity())
+//  , rounds (10)
+//  , population_size (200)
   , rounds (10)
   , population_size (200)
+  
   , best_selection_size (5)
   , random_selection_size (3)
   , number_of_parents (2)

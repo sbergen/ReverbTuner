@@ -1,14 +1,15 @@
 #ifndef REVERB_TUNER_THREADED_SCHEDULER_H
 #define REVERB_TUNER_THREADED_SCHEDULER_H
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <list>
+#include <iostream>
+
+#include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 
 #include "evaluation_scheduler.h"
 #include "evaluation_set.h"
 #include "parameter_values.h"
-
-#include <iostream>
 
 namespace ReverbTuner {
 
@@ -24,7 +25,7 @@ class ThreadedScheduler : public EvaluationScheduler
 	{
 		evaluators.clear ();
 		for (unsigned i = 0; i < amount; ++i) {
-			boost::assign::ptr_push_back (evaluators) (data_source);
+			evaluators.push_back (EvaluatorPtr (new EvaluatorType (data_source)));
 		}
 	}
 	
@@ -33,50 +34,49 @@ class ThreadedScheduler : public EvaluationScheduler
 		set.go_to_first ();
 		
 		// Wait for evaluator threads + this thread
-		SyncedData data (set, evaluators.size () + 1);
+		SyncedDataPtr data (new SyncedData (set, evaluators.size () + 1));
 		for (typename EvaluatorContainer::iterator it = evaluators.begin (); it != evaluators.end (); ++it) {
-			boost::thread (start_evaluator, boost::ref (data), boost::ref (*it));
+			boost::thread (start_evaluator, data, *it);
 		}
 		
-		std::cout << "evaluate before wait" << std::endl;
-		data.barrier.wait ();
-		std::cout << "evaluate after wait" << std::endl;
+		data->barrier.wait ();
 	}
 	
   private:
 	
 	// Synced data struct shared by threads
-	struct SyncedData
+	struct SyncedData : private boost::noncopyable
 	{
 		SyncedData (EvaluationSet const & set, unsigned barrier_count)
-		  : set (set), barrier (barrier_count) {}
+		  : set (set), barrier (barrier_count) { }
 		
 		EvaluationSet const & set;
 		boost::mutex   mutex;
 		boost::barrier barrier;
 	};
 	
+	typedef boost::shared_ptr<EvaluatorType> EvaluatorPtr;
+	typedef boost::shared_ptr<SyncedData> SyncedDataPtr;
 	
-	static void start_evaluator (SyncedData & data, EvaluatorType & evaluator)
+	
+	static void start_evaluator (SyncedDataPtr data, EvaluatorPtr evaluator)
 	{
 		ParameterValues const * parameters;
 		EvaluationResult * result;
 		
 		while (true) {
-			data.mutex.lock();
-			bool have_data = data.set.next_pair (parameters, result);
-			data.mutex.unlock();
+			data->mutex.lock();
+			bool have_data = data->set.next_pair (parameters, result);
+			data->mutex.unlock();
 			
 			if (!have_data) { break; }
-			evaluator.evaluate_parameters (*parameters, *result);
+			evaluator->evaluate_parameters (*parameters, *result);
 		}
 		
-		std::cout << "start_evaluator before wait" << std::endl;
-		data.barrier.wait ();
-		std::cout << "start_evaluator after wait" << std::endl;
+		data->barrier.wait ();
 	}
 	
-	typedef boost::ptr_vector<EvaluatorType> EvaluatorContainer;
+	typedef std::list<EvaluatorPtr> EvaluatorContainer;
 	EvaluatorContainer evaluators;
 };
 

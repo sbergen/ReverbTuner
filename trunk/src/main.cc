@@ -3,6 +3,7 @@
 #include "reverbtuner/data_source.h"
 #include "reverbtuner/mfcc_evaluator.h"
 #include "reverbtuner/threaded_scheduler.h"
+#include "reverbtuner/single_threaded_scheduler.h"
 #include "reverbtuner/evolutionary_optimizer.h"
 #include "reverbtuner/random_generator.h"
 
@@ -50,8 +51,9 @@ int main ()
 	
 	std::cout << "Instantiating evaluator for plugin \"" << factory.plugin_name (which) << "\"" << std::endl;
 	
+	//SingleThreadedScheduler<MfccEvaluator> scheduler (data_source);
 	ThreadedScheduler<MfccEvaluator> scheduler (data_source);
-	scheduler.alloc_resources (4);
+	scheduler.alloc_resources ();
 	RandomGenerator rg;
 	EvolutionaryOptimizer optimizer (data_source, scheduler, rg);
 	
