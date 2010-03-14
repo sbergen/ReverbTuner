@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import autowaf
+import Options
 
 # Version of this package (even if built as a child)
 REVERB_TUNER_VERSION = '0.0.0'
@@ -32,6 +33,19 @@ def configure(conf):
 	autowaf.check_header(conf, 'boost/random.hpp', mandatory=True)
 	
 	conf.env.append_value('LINKFLAGS', '-lboost_thread-mt')
+	
+	optimization_flags = [
+		"-O3",
+		"-fomit-frame-pointer",
+		"-ffast-math",
+		"-fstrength-reduce",
+		"-pipe"
+		]
+
+	if not Options.options.debug:
+		conf.env.append_value('CCFLAGS', optimization_flags)
+		conf.env.append_value('CXXFLAGS', optimization_flags)
+		conf.env.append_value('LINKFLAGS', optimization_flags)
 
 def build(bld):
 
