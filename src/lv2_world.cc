@@ -34,4 +34,20 @@ Lv2World::~Lv2World ()
 	slv2_world_free (world);
 }
 
+float
+Lv2World::value_as_float (SLV2Value val)
+{
+	float ret = val ? slv2_value_as_float (val) : 0.0;
+	slv2_value_free(val);
+	return ret;
+}
+
+std::string
+Lv2World::value_as_string (SLV2Value val)
+{
+	std::string str (val ? slv2_value_as_string (val) : "");
+	slv2_value_free (val);
+	return str;
+}
+
 } // namespace ReverbTuner

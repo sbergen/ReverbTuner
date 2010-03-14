@@ -30,7 +30,6 @@ class Lv2Plugin : public Plugin
 	
 	void init_params_from_plugin ();
 	void add_parameter_from_port (unsigned index, SLV2Port port);
-	float value_as_float (SLV2Value val);
 	
 	void ensure_dummy_buffers (unsigned buffer_size);
 	

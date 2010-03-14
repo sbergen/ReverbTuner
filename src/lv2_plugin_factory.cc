@@ -19,10 +19,7 @@ std::string
 Lv2PluginFactory::plugin_name (unsigned index)
 {
 	SLV2Plugin plugin = slv2_plugins_get_at (world.plugins, index);
-	SLV2Value value = slv2_plugin_get_name (plugin);
-	std::string str(slv2_value_as_string (value));
-	slv2_value_free (value);
-	return str;
+	return Lv2World::value_as_string (slv2_plugin_get_name (plugin));
 }
 
 boost::shared_ptr<Plugin>

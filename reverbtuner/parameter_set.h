@@ -21,11 +21,14 @@ class ParameterSet
 	
 	iterator begin () const { return parameters.begin(); }
 	iterator end () const { return parameters.end(); }
-	iterator find (unsigned i) const { return parameters.find (i); }
+	
+	// May only be called with valid indexes!
+	Parameter & operator[] (unsigned index) { return *parameters.find (index)->second; } 
+	Parameter const & operator[] (unsigned index) const { return *parameters.find (index)->second; }
 	
 	/// Takes ownership of \a parameter
-	void add_parameter (unsigned index, Parameter * parameter)
-		{ parameters.insert (index, parameter); }
+	Parameter & add_parameter (unsigned index, Parameter * parameter)
+		{ parameters.insert (index, parameter); return *parameter; }
 	
 	unsigned index_of_parameter (Parameter const * parameter) const
 	{

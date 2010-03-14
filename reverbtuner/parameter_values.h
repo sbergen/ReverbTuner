@@ -2,6 +2,7 @@
 #define REVERB_TUNER_PARAMETER_VALUES_H
 
 #include <map>
+#include <iostream>
 
 namespace ReverbTuner {
 
@@ -20,10 +21,15 @@ class ParameterValues
 	ParameterValues & operator= (ParameterValues const & other);
 	
 	typedef Values::iterator iterator;
+	typedef Values::const_iterator const_iterator;
+	
 	iterator begin() { return values.begin(); }
 	iterator end() { return values.end(); }
 	
-	ParameterSet const & get_set () { return set; }
+	const_iterator begin() const { return values.begin(); }
+	const_iterator end() const { return values.end(); }
+	
+	ParameterSet const & get_set () const { return set; }
 	
 	float & operator[] (unsigned index);
 	float operator[] (unsigned index) const;
@@ -35,6 +41,8 @@ class ParameterValues
 	ParameterSet const & set;
 	Values values;
 };
+
+std::ostream & operator<< (std::ostream & stream, ParameterValues const & values);
 
 } // namespace ReverbTuner
 

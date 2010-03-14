@@ -51,4 +51,13 @@ ParameterValues::operator[] (Parameter const & param) const
 	return const_cast<ParameterValues &>(*this)[param];
 }
 
+std::ostream & operator<< (std::ostream & stream, ParameterValues const & values)
+{
+	ParameterSet const & set = values.get_set ();
+	for (ParameterValues::const_iterator it = values.begin (); it != values.end(); ++it) {
+		stream << set[it->first].name () << ": " << it->second << std::endl;
+	}
+	return stream;
+}
+
 } // namespace ReverbTuner
