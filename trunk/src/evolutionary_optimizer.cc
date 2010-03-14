@@ -31,7 +31,7 @@ EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, Ev
   , rounds (10)
   , population_size (200)
   
-  , best_selection_size (5)
+  , best_selection_size (8)
   , random_selection_size (3)
   , number_of_parents (2)
   , maximum_mutations (2)

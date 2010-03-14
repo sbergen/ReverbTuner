@@ -31,6 +31,11 @@ Lv2Plugin::clone() const
 void
 Lv2Plugin::reset ()
 {
+	// Update latency port by running for one sample with current settings
+	// Some plugins crash when run for 0 frames
+	float dummy = 0.0;
+	run (&dummy, &dummy, 1);
+	
 	slv2_instance_deactivate (instance);
 	slv2_instance_activate (instance);
 }
@@ -44,6 +49,12 @@ Lv2Plugin::run (float const * in, float * out, unsigned frames)
 	slv2_instance_connect_port (instance, in_port_index, const_cast<float *> (in));
 	slv2_instance_connect_port (instance, out_port_index, out);
 	slv2_instance_run (instance, frames);
+}
+
+unsigned
+Lv2Plugin::latency ()
+{
+	return current_latency > 0 ? current_latency : 0;
 }
 
 void
@@ -64,39 +75,61 @@ Lv2Plugin::init_params_from_plugin ()
 	dummy_in_indices.clear ();
 	dummy_out_indices.clear ();
 	
-	bool input_found = false;
-	bool output_found = false;
-	unsigned num_ports = slv2_plugin_get_num_ports (plugin);
+	in_port_index = -1;
+	out_port_index = -1;
+	current_latency = 0;
 	
+	unsigned num_ports = slv2_plugin_get_num_ports (plugin);
 	for (unsigned i = 0; i < num_ports; i++) {
 		SLV2Port port = slv2_plugin_get_port_by_index (plugin, i);
 		
 		if (slv2_port_is_a (plugin, port, world.input_class)) {
-			if (slv2_port_is_a (plugin, port, world.audio_class)) {
-				if (!input_found) {
-					in_port_index = i;
-					input_found = true;
-				} else {
-					dummy_in_indices.push_back (i);
-				}
-			} else if (slv2_port_is_a (plugin, port, world.control_class)) {
-				add_parameter_from_port (i, port);
-			}
+			add_input_from_port (i, port);
 		} else if (slv2_port_is_a (plugin, port, world.output_class)) {
-			if (slv2_port_is_a (plugin, port, world.audio_class)) {
-				if (!output_found) {
-					out_port_index = i;
-					output_found = true;
-				} else {
-					dummy_out_indices.push_back (i);
-				}
-			}
+			add_output_from_port (i, port);
 		}
 	}
 	
-	if (!output_found || !input_found) {
+	if (out_port_index == -1 || in_port_index == -1) {
 		throw std::logic_error ("Could not find appropriate ports from plugin");
 	}
+}
+
+void
+Lv2Plugin::add_input_from_port (unsigned index, SLV2Port port)
+{
+	// Handle audio port as possible input
+	if (slv2_port_is_a (plugin, port, world.audio_class) && in_port_index == -1) {
+			in_port_index = index;
+	// then control ports as parameters
+	} else if (slv2_port_is_a (plugin, port, world.control_class)) {
+		add_parameter_from_port (index, port);
+	// optional to NULL
+	} else if (slv2_port_has_property (plugin, port, world.optional)) {
+		slv2_instance_connect_port (instance, index, NULL);
+	// else dummy
+	} else {
+		dummy_in_indices.push_back (index);
+	}
+}
+
+void
+Lv2Plugin::add_output_from_port (unsigned index, SLV2Port port)
+{
+	// Handle audio ports as possible output
+	if (slv2_port_is_a (plugin, port, world.audio_class) && out_port_index == -1) {
+		out_port_index = index;
+	// then latency port
+	} else if (slv2_port_has_property (plugin, port, world.latency)) {
+		slv2_instance_connect_port (instance, index, &current_latency);
+	// optional to NULL
+	} else if (slv2_port_has_property (plugin, port, world.optional)) {
+		slv2_instance_connect_port (instance, index, NULL);
+	// else dummy
+	} else {
+		dummy_out_indices.push_back (index);
+	}
+		 
 }
 
 void

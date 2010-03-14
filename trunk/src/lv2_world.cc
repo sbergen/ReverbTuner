@@ -14,6 +14,8 @@ Lv2World::Lv2World (double samplerate)
 	output_class = slv2_value_new_uri (world, SLV2_PORT_CLASS_OUTPUT);
 	control_class = slv2_value_new_uri (world, SLV2_PORT_CLASS_CONTROL);
 	audio_class = slv2_value_new_uri (world, SLV2_PORT_CLASS_AUDIO);
+	optional = slv2_value_new_uri(world, SLV2_NAMESPACE_LV2 "connectionOptional");
+	latency = slv2_value_new_uri(world, SLV2_NAMESPACE_LV2 "reportsLatency");
 	integer = slv2_value_new_uri(world, SLV2_NAMESPACE_LV2 "integer");
 	toggled = slv2_value_new_uri(world, SLV2_NAMESPACE_LV2 "toggled");
 	srate = slv2_value_new_uri(world, SLV2_NAMESPACE_LV2 "sampleRate");
@@ -25,6 +27,8 @@ Lv2World::~Lv2World ()
 	slv2_value_free (output_class);
 	slv2_value_free (control_class);
 	slv2_value_free (audio_class);
+	slv2_value_free (optional);
+	slv2_value_free (latency);
 	slv2_value_free (integer);
 	slv2_value_free (toggled);
 	slv2_value_free (srate);
