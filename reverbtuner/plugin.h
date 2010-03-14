@@ -20,6 +20,7 @@ class Plugin
 	virtual PluginPtr clone() const = 0;
 	virtual void reset () = 0;
 	virtual void run (float const * in, float * out, unsigned frames) = 0;
+	virtual unsigned latency () = 0;
 	virtual void apply_parameters (ParameterValues const & parameters) = 0;
 	virtual ParameterSet const & get_parameters () const = 0;
 

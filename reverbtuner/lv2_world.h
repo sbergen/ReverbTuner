@@ -22,10 +22,15 @@ struct Lv2World
 	SLV2World   world;
 	SLV2Plugins plugins;
 	
+	// Port classes
 	SLV2Value input_class;
 	SLV2Value output_class;
 	SLV2Value control_class;
 	SLV2Value audio_class;
+	
+	// Port properties
+	SLV2Value optional;
+	SLV2Value latency;
 	SLV2Value integer;
 	SLV2Value toggled;
 	SLV2Value srate;
