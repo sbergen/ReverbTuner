@@ -9,10 +9,6 @@ Lv2PluginFactory::Lv2PluginFactory (double samplerate)
 {
 }
 
-Lv2PluginFactory::~Lv2PluginFactory ()
-{
-}
-
 unsigned
 Lv2PluginFactory::plugin_count ()
 {
@@ -29,7 +25,7 @@ Lv2PluginFactory::plugin_name (unsigned index)
 	return str;
 }
 
-boost::shared_ptr<Lv2Plugin>
+boost::shared_ptr<Plugin>
 Lv2PluginFactory::plugin (unsigned index)
 {
 	SLV2Plugin plugin = slv2_plugins_get_at (world.plugins, index);

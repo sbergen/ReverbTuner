@@ -1,5 +1,5 @@
 #include "reverbtuner/lv2_plugin_factory.h"
-#include "reverbtuner/lv2_plugin.h"
+#include "reverbtuner/plugin.h"
 #include "reverbtuner/data_source.h"
 #include "reverbtuner/mfcc_evaluator.h"
 #include "reverbtuner/threaded_scheduler.h"
@@ -46,7 +46,7 @@ int main ()
 		std::cin >> which;
 	} while (which > count);
 	
-	boost::shared_ptr<Lv2Plugin> plugin = factory.plugin (which);
+	boost::shared_ptr<Plugin> plugin = factory.plugin (which);
 	data_source.set_plugin (plugin);
 	
 	std::cout << "Instantiating evaluator for plugin \"" << factory.plugin_name (which) << "\"" << std::endl;
