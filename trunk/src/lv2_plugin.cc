@@ -122,27 +122,21 @@ Lv2Plugin::add_parameter_from_port (unsigned index, SLV2Port port)
 	// Default min and max
 	SLV2Value def, min, max;
 	slv2_port_get_range (plugin, port, &def, &min, &max);
-	float def_value = value_as_float (def);
+	float def_value = Lv2World::value_as_float (def);
 	
 	// Generate parameter
-	param_set.add_parameter (index,
+	Parameter & parameter = param_set.add_parameter (
+		index,
 		new Parameter (
 			type,
 			def_value,
-			value_as_float (min),
-			value_as_float (max)
+			Lv2World::value_as_float (min),
+			Lv2World::value_as_float (max)
 		));
+	parameter.set_name (Lv2World::value_as_string (slv2_port_get_name (plugin, port)));
 	
 	param_vals[index] = def_value;
 	slv2_instance_connect_port (instance, index, &param_vals[index]);
-}
-
-float
-Lv2Plugin::value_as_float (SLV2Value val)
-{
-	float ret = val ? slv2_value_as_float (val) : 0.0;
-	slv2_value_free(val);
-	return ret;
 }
 
 void

@@ -11,6 +11,7 @@
 #include "reverbtuner/evaluation_scheduler.h"
 #include "reverbtuner/plugin.h"
 #include "reverbtuner/parameter_set.h"
+#include "reverbtuner/parameter_values.h"
 #include "reverbtuner/utils.h"
 #include "reverbtuner/random_generator.h"
 
@@ -55,6 +56,8 @@ EvolutionaryOptimizer::run ()
 		select_random ();
 		reproduce_from_selected ();
 	}
+	
+	std::cout << *best_params;
 }
 
 void
@@ -101,9 +104,7 @@ void
 EvolutionaryOptimizer::mutate_one (ParameterValues & values)
 {
 	unsigned index = values.get_set ().random_index (rg);
-	// iterator is guaranteed to be valid
-	ParameterSet::iterator it = values.get_set ().find (index);
-	param_modifier.randomize_uniform (values[index], *it->second);
+	param_modifier.randomize_uniform (values[index], values.get_set ()[index]);
 }
 
 void
@@ -140,8 +141,13 @@ EvolutionaryOptimizer::results_into_map ()
 void
 EvolutionaryOptimizer::store_best_result ()
 {
-	float this_time_best = (--all_results.end())->first;
-	best_value = std::max (best_value, this_time_best);
+	ResultMap::const_iterator best_it = --all_results.end();
+	float this_time_best = best_it->first;
+	if (this_time_best > best_value) {
+		best_value = this_time_best;
+		best_params.reset (new ParameterValues (*best_it->second));
+	}
+	
 	std::cout << "Best for round: " << this_time_best << std::endl;
 }
 

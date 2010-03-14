@@ -2,6 +2,7 @@
 #define REVERB_TUNER_EVOLUTIONARY_OPTIMIZER_H
 
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include "reverbtuner/evaluation_set.h"
 #include "reverbtuner/parameter_modifier.h"
@@ -10,6 +11,7 @@ namespace ReverbTuner {
 
 class DataSource;
 class EvaluationScheduler;
+class ParameterValues;
 
 class EvolutionaryOptimizer
 {
@@ -47,6 +49,7 @@ class EvolutionaryOptimizer
 	ParameterModifier param_modifier;
 	
 	float best_value;
+	boost::scoped_ptr<ParameterValues> best_params;
 	
   private: // intermediate data
 	// We need to take a copy of selected values
