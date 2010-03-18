@@ -3,8 +3,8 @@
 #include "reverbtuner/data_source.h"
 
 AssistantFilePage::AssistantFilePage ()
-  : wet_file_chooser ("Wet impulse file:", "../../samples/sample.wav")
-  , dry_file_chooser ("Dry impulse file:", "../../samples/impulse.wav")
+  : wet_file_chooser ("Wet impulse file:", "samples/sample.wav")
+  , dry_file_chooser ("Dry impulse file:", "samples/impulse.wav")
   , load_button ("Load files")
 {
 	pack_start (wet_file_chooser, false, false);
