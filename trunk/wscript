@@ -25,6 +25,7 @@ def configure(conf):
 	autowaf.check_pkg(conf, 'slv2', uselib_store='SLV2', atleast_version='0.6.6', mandatory=True)
 	autowaf.check_pkg(conf, 'aubio', uselib_store='AUBIO', atleast_version='0.3.3', mandatory=True)
 	autowaf.check_pkg(conf, 'sndfile', uselib_store='SNDFILE', atleast_version='1.0.17', mandatory=True)
+	autowaf.check_pkg(conf, 'gtkmm-2.4', uselib_store='GTKMM', atleast_version='2.8', mandatory=True)
 	
 	# Boost headers
 	autowaf.check_header(conf, 'boost/ptr_container/ptr_container.hpp', mandatory=True)
@@ -49,9 +50,8 @@ def configure(conf):
 
 def build(bld):
 
-	reverbtuner = bld.new_task_gen('cxx', 'program')
+	reverbtuner = bld.new_task_gen('cxx', 'cshlib')
 	reverbtuner.source = '''
-		src/main.cc
 		src/data_source.cc
 		src/evolutionary_optimizer.cc
 		src/evaluation_set.cc
@@ -65,8 +65,22 @@ def build(bld):
 	'''
 	reverbtuner.includes     = '.'
 	reverbtuner.uselib       = 'SLV2 AUBIO SNDFILE'
-	reverbtuner.target       = 'reverbtune'
+	reverbtuner.target       = 'reverbtuner'
 	reverbtuner.install_path = ''
+	reverbtuner.name         = 'reverbtuner'
+	
+	gui = bld.new_task_gen('cxx', 'cprogram')
+	gui.source = '''
+		gui/main.cc
+		gui/assistant_file_page.cc
+		gui/main_assistant.cc
+	'''
+	gui.includes     = '.'
+	gui.uselib       = 'GTKMM'
+	gui.uselib_local = 'reverbtuner'
+	gui.target       = 'reverbtuner-gui'
+	gui.install_path = ''
+	
 
 def shutdown():
 	autowaf.shutdown()
