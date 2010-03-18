@@ -135,15 +135,7 @@ Lv2Plugin::add_output_from_port (unsigned index, SLV2Port port)
 void
 Lv2Plugin::add_parameter_from_port (unsigned index, SLV2Port port)
 {
-	enum Type {
-		TypeNormal,
-		TypeInteger,
-		TypeSampleRate,
-		TypeToggled
-	};
-	
 	Parameter::Type type = Parameter::TypeNormal;
-	
 	if (slv2_port_has_property (plugin, port, world.integer)) {
 		type = Parameter::TypeInteger;
 	} else if (slv2_port_has_property (plugin, port, world.toggled)) {
@@ -159,10 +151,8 @@ Lv2Plugin::add_parameter_from_port (unsigned index, SLV2Port port)
 	
 	// Generate parameter
 	Parameter & parameter = param_set.add_parameter (
-		index,
-		new Parameter (
-			type,
-			def_value,
+		index, new Parameter (
+			type, def_value,
 			Lv2World::value_as_float (min),
 			Lv2World::value_as_float (max)
 		));
