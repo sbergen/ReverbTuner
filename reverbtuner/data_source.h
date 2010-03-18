@@ -21,6 +21,7 @@ class DataSource
 	
 	typedef std::vector<float> Data;
 	
+	/// Throws std::invalid_argument if files are not valid in some way
 	DataSource (std::string const & dry_filename, std::string const & target_filename);
 	~DataSource ();
 	

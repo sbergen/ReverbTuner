@@ -10,10 +10,18 @@ DataSource::DataSource (std::string const & dry_filefilename, std::string const 
 	SndfileHandle dry_file (dry_filefilename);
 	SndfileHandle target_file (target_filefilename);
 	
+	if (!dry_file || !target_file) {
+		throw std::invalid_argument ("Failed to load a file");
+	}
+	
 	samplerate = dry_file.samplerate ();
 	
+	if (samplerate != target_file.samplerate ()) {
+		throw std::invalid_argument ("Sample rates don't match");
+	}
+	
 	if (dry_file.channels() != 1 || target_file.channels() != 1) {
-		throw std::invalid_argument ("dry or target file is not mono");
+		throw std::invalid_argument ("Dry or target file is not mono");
 	}
 	
 	read_file (dry_file, dry_data);
