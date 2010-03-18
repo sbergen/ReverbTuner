@@ -7,6 +7,7 @@
 #include <boost/assign/ptr_map_inserter.hpp>
 
 #include "reverbtuner/data_source.h"
+#include "reverbtuner/evaluation_progress.h"
 #include "reverbtuner/evaluation_result.h"
 #include "reverbtuner/evaluation_scheduler.h"
 #include "reverbtuner/plugin.h"
@@ -44,11 +45,17 @@ EvolutionaryOptimizer::~EvolutionaryOptimizer ()
 }
 
 void
-EvolutionaryOptimizer::run ()
+EvolutionaryOptimizer::run (boost::shared_ptr<EvaluationProgress> progress_)
 {
+	progress = progress_;
+	progress->set_total_rounds (rounds);
+	
 	initialize_set ();
 	
 	for (unsigned i = 0; i < rounds; ++i) {
+		if (progress->aborted()) { return; }
+		
+		progress->set_current_round (i + 1);
 		scheduler.evaluate (evaluation_set);
 		results_into_map ();
 		store_best_result ();
@@ -148,6 +155,7 @@ EvolutionaryOptimizer::store_best_result ()
 		best_params.reset (new ParameterValues (*best_it->second));
 	}
 	
+	progress->set_best_result (best_value);
 	std::cout << "Best for round: " << this_time_best << std::endl;
 }
 

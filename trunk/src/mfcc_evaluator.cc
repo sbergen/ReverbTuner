@@ -87,7 +87,13 @@ MfccEvaluator::run_mfcc (Data const & in, CoefData & result, unsigned frames, bo
 	unsigned position = 0;
 	unsigned round = 0;
 	
-	if (run_plugin) { plugin->reset(); }
+	if (run_plugin) {
+		plugin->reset();
+		if (plugin->latency()) {
+			std::cerr << "Plugin has a latency of " << plugin->latency() <<
+			             " frames. Plugin latency is currently not compensated for!" << std::endl;
+		}
+	}
 	
 	// First run whole frames of data (in place)
 	while ((data_frames - position) > static_cast<long> (mfcc_buffer_size)) {
