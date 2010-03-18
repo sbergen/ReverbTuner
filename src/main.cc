@@ -6,6 +6,7 @@
 #include "reverbtuner/single_threaded_scheduler.h"
 #include "reverbtuner/evolutionary_optimizer.h"
 #include "reverbtuner/random_generator.h"
+#include "reverbtuner/evaluation_progress.h"
 
 #include <iostream>
 
@@ -59,7 +60,8 @@ int main ()
 	
 	std::cout << "Running evaluator.." << std::endl;
 	
-	optimizer.run();
+	boost::shared_ptr<EvaluationProgress> progress (new EvaluationProgress ());
+	optimizer.run (progress);
 	
 	std::cout << "Done!" << std::endl;
 }

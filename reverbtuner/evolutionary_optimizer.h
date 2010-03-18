@@ -3,6 +3,7 @@
 
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "reverbtuner/evaluation_set.h"
 #include "reverbtuner/parameter_modifier.h"
@@ -12,6 +13,7 @@ namespace ReverbTuner {
 class DataSource;
 class EvaluationScheduler;
 class ParameterValues;
+class EvaluationProgress;
 
 class EvolutionaryOptimizer
 {
@@ -19,7 +21,7 @@ class EvolutionaryOptimizer
 	EvolutionaryOptimizer (DataSource const & data_source, EvaluationScheduler & scheduler, RandomGenerator & rg);
 	~EvolutionaryOptimizer ();
 
-	void run ();
+	void run (boost::shared_ptr<EvaluationProgress> progress_);
 	
   private:
 	void initialize_set ();
@@ -50,6 +52,8 @@ class EvolutionaryOptimizer
 	
 	float best_value;
 	boost::scoped_ptr<ParameterValues> best_params;
+	
+	boost::shared_ptr<EvaluationProgress> progress;
 	
   private: // intermediate data
 	// We need to take a copy of selected values
