@@ -2,7 +2,7 @@
 
 #include "reverbtuner/data_source.h"
 
-AssistantFilePage::AssistantFilePage ()
+FileSelectionView::FileSelectionView ()
   : wet_file_chooser ("Wet impulse file:", "samples/sample.wav")
   , dry_file_chooser ("Dry impulse file:", "samples/impulse.wav")
   , load_button ("Load files")
@@ -13,16 +13,16 @@ AssistantFilePage::AssistantFilePage ()
 	pack_start (dry_waveform, true, true);
 	pack_start (load_button, false, false);
 	
-	load_button.signal_clicked().connect (sigc::mem_fun(*this, &AssistantFilePage::load_files));
+	load_button.signal_clicked().connect (sigc::mem_fun(*this, &FileSelectionView::load_files));
 }
 
-AssistantFilePage::~AssistantFilePage ()
+FileSelectionView::~FileSelectionView ()
 {
 
 }
 
 void
-AssistantFilePage::load_files ()
+FileSelectionView::load_files ()
 {
 	wet_waveform.reset_data ();
 	dry_waveform.reset_data ();
@@ -50,7 +50,7 @@ AssistantFilePage::load_files ()
 
 /*** File chooser ***/
 
-AssistantFilePage::FileChooser::FileChooser (Glib::ustring const & description, Glib::ustring const & default_file)
+FileSelectionView::FileChooser::FileChooser (Glib::ustring const & description, Glib::ustring const & default_file)
   : entry_label (description, Gtk::ALIGN_LEFT)
 {
 	// Entry entry and button
@@ -60,20 +60,20 @@ AssistantFilePage::FileChooser::FileChooser (Glib::ustring const & description, 
 	
 	// Button
 	browse_button.set_label ("Browse");
-	browse_button.signal_clicked().connect (sigc::mem_fun(*this, &AssistantFilePage::FileChooser::browse));
+	browse_button.signal_clicked().connect (sigc::mem_fun(*this, &FileSelectionView::FileChooser::browse));
 	
 	// Pack
 	pack_start (entry_label, false, false);
 	pack_start (entry_box);
 }
 
-AssistantFilePage::FileChooser::~FileChooser ()
+FileSelectionView::FileChooser::~FileChooser ()
 {
 
 }
 
 void
-AssistantFilePage::FileChooser::browse ()
+FileSelectionView::FileChooser::browse ()
 {
 	Gtk::FileChooserDialog dialog ("Choose file", Gtk::FILE_CHOOSER_ACTION_OPEN);
 	dialog.set_filename (entry.get_text ());

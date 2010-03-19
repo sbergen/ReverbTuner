@@ -1,6 +1,6 @@
 #include "plugin_selection_view.h"
 
-AssistantPluginPage::AssistantPluginPage ()
+PluginSelectionView::PluginSelectionView ()
   : plugin_list (1)
 {
 	populate_plugin_list ();
@@ -10,13 +10,13 @@ AssistantPluginPage::AssistantPluginPage ()
 	pack_start (plugin_scroller, true, true);
 }
 
-AssistantPluginPage::~AssistantPluginPage ()
+PluginSelectionView::~PluginSelectionView ()
 {
 
 }
 
 ReverbTuner::PluginPtr
-AssistantPluginPage::get_plugin (double samplerate)
+PluginSelectionView::get_plugin (double samplerate)
 {
 	Gtk::ListViewText::SelectionList selected = plugin_list.get_selected ();
 	if (!selected.size ()) { return ReverbTuner::PluginPtr (); }
@@ -24,7 +24,7 @@ AssistantPluginPage::get_plugin (double samplerate)
 }
 
 void
-AssistantPluginPage::populate_plugin_list ()
+PluginSelectionView::populate_plugin_list ()
 {
 	plugin_list.set_column_title (0, "Plugin name");
 	unsigned count = factory.plugin_count ();
