@@ -8,7 +8,9 @@ AssistantFilePage::AssistantFilePage ()
   , load_button ("Load files")
 {
 	pack_start (wet_file_chooser, false, false);
+	pack_start (wet_waveform, true, true);
 	pack_start (dry_file_chooser, false, false);
+	pack_start (dry_waveform, true, true);
 	pack_start (load_button, false, false);
 	
 	load_button.signal_clicked().connect (sigc::mem_fun(*this, &AssistantFilePage::load_files));
@@ -22,6 +24,9 @@ AssistantFilePage::~AssistantFilePage ()
 void
 AssistantFilePage::load_files ()
 {
+	wet_waveform.reset_data ();
+	dry_waveform.reset_data ();
+	
 	try {
 		data_source.reset (new ReverbTuner::DataSource (
 			dry_file_chooser.get_filename (), wet_file_chooser.get_filename ()));
@@ -30,7 +35,17 @@ AssistantFilePage::load_files ()
 		message += e.what ();
 		Gtk::MessageDialog fail_dialog (message, false, Gtk::MESSAGE_ERROR);
 		fail_dialog.run ();
+		complete_changed (*this, false);
+		return;
 	}
+	
+	ReverbTuner::DataSource::Data const & wet_data = data_source->get_target_data ();
+	ReverbTuner::DataSource::Data const & dry_data = data_source->get_dry_data ();
+	
+	wet_waveform.set_data (wet_data, wet_data.size());
+	dry_waveform.set_data (dry_data, wet_data.size());
+	
+	complete_changed (*this, true);
 }
 
 /*** File chooser ***/
@@ -38,18 +53,18 @@ AssistantFilePage::load_files ()
 AssistantFilePage::FileChooser::FileChooser (Glib::ustring const & description, Glib::ustring const & default_file)
   : entry_label (description, Gtk::ALIGN_LEFT)
 {
-	// Label and entry
+	// Entry entry and button
 	entry.set_text (default_file);
-	entry_box.pack_start (entry_label,false, false);
-	entry_box.pack_start (entry, true, false);
+	entry_box.pack_start (entry, true, true);
+	entry_box.pack_start (browse_button, false, false);
 	
 	// Button
 	browse_button.set_label ("Browse");
 	browse_button.signal_clicked().connect (sigc::mem_fun(*this, &AssistantFilePage::FileChooser::browse));
 	
 	// Pack
-	pack_start (entry_box, true, true);
-	pack_start (browse_button, false, false);
+	pack_start (entry_label, false, false);
+	pack_start (entry_box);
 }
 
 AssistantFilePage::FileChooser::~FileChooser ()
