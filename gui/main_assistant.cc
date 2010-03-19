@@ -16,9 +16,10 @@ MainAssistant::MainAssistant ()
 	set_page_title(file_page, "Select impulse files");
 	file_page.complete_changed.connect (mem_fun (*this, &MainAssistant::set_page_complete));
 	
-	Gtk::Widget & plugin_page = *Gtk::manage (new AssistantPluginPage ());
+	AssistantPluginPage & plugin_page = *Gtk::manage (new AssistantPluginPage ());
 	append_page (plugin_page);
 	set_page_title(plugin_page, "Select plugin");
+	set_page_complete (plugin_page, true);
 	
 	show_all();
 }
