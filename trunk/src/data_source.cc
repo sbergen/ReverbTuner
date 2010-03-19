@@ -10,7 +10,7 @@ DataSource::DataSource (std::string const & dry_filefilename, std::string const 
 	SndfileHandle dry_file (dry_filefilename);
 	SndfileHandle target_file (target_filefilename);
 	
-	if (!dry_file || !target_file) {
+	if (dry_file.error () || target_file.error ()) {
 		throw std::invalid_argument ("Failed to load a file");
 	}
 	

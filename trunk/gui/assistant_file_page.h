@@ -2,8 +2,9 @@
 #define REVERB_TUBER_GUI_ASSISTANT_FILE_PAGE_H
 
 #include <boost/shared_ptr.hpp>
-
 #include <gtkmm.h>
+
+#include "waveform.h"
 
 namespace ReverbTuner {
 	class DataSource;
@@ -15,14 +16,13 @@ class AssistantFilePage : public Gtk::VBox
 	AssistantFilePage ();
 	~AssistantFilePage ();
 	
-	typedef boost::shared_ptr<ReverbTuner::DataSource> DataSourcePtr;
-	DataSourcePtr get_data_source () { return data_source; }
+	sigc::signal<void, Gtk::Widget &, bool> complete_changed;
 	
   private:
 
 	void load_files ();
 	
-	class FileChooser : public Gtk::HBox
+	class FileChooser : public Gtk::VBox
 	{
 	  public:
 		FileChooser (Glib::ustring const & description, Glib::ustring const & default_file);
@@ -33,10 +33,9 @@ class AssistantFilePage : public Gtk::VBox
 	  private:
 		void browse ();
 		
-		Gtk::VBox   entry_box;
 		Gtk::Label  entry_label;
+		Gtk::HBox   entry_box;
 		Gtk::Entry  entry;
-		
 		Gtk::Button browse_button;
 	};
 
@@ -45,7 +44,11 @@ class AssistantFilePage : public Gtk::VBox
 	FileChooser dry_file_chooser;
 	Gtk::Button load_button;
 	
+	Waveform wet_waveform;
+	Waveform dry_waveform;
+	
 	// Data
+	typedef boost::shared_ptr<ReverbTuner::DataSource> DataSourcePtr;
 	DataSourcePtr data_source;
 };
 

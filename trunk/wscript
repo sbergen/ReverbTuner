@@ -74,6 +74,7 @@ def build(bld):
 		gui/main.cc
 		gui/assistant_file_page.cc
 		gui/main_assistant.cc
+		gui/waveform.cc
 	'''
 	gui.includes     = '.'
 	gui.uselib       = 'GTKMM'
