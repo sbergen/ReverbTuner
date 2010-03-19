@@ -10,11 +10,11 @@ namespace ReverbTuner {
 	class DataSource;
 }
 
-class AssistantFilePage : public Gtk::VBox
+class FileSelectionView : public Gtk::VBox
 {
   public:
-	AssistantFilePage ();
-	~AssistantFilePage ();
+	FileSelectionView ();
+	~FileSelectionView ();
 	
 	sigc::signal<void, Gtk::Widget &, bool> complete_changed;
 	

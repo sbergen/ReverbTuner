@@ -6,11 +6,11 @@
 #include "reverbtuner/plugin.h"
 #include "reverbtuner/lv2_plugin_factory.h"
 
-class AssistantPluginPage : public Gtk::VBox
+class PluginSelectionView : public Gtk::VBox
 {
   public:
-	AssistantPluginPage ();
-	~AssistantPluginPage ();
+	PluginSelectionView ();
+	~PluginSelectionView ();
 	
 	ReverbTuner::PluginPtr get_plugin (double samplerate);
 	
