@@ -20,7 +20,7 @@ class Lv2Plugin : public Plugin
 	Lv2Plugin (Lv2World & world, SLV2Plugin plugin, double samplerate);
 	~Lv2Plugin();
 	
-	PluginPtr clone() const;
+	SharedPluginPtr clone() const;
 	void reset ();
 	void run (float const * in, float * out, unsigned frames);
 	unsigned latency ();

@@ -2,17 +2,12 @@
 #define REVERB_TUNER_RUNNER_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include "reverbtuner/random_generator.h"
+#include "reverbtuner/types.h"
 
 namespace ReverbTuner {
-
-class DataSource;
-class Plugin;
-class PluginFactory;
-class EvaluationScheduler;
-class EvolutionaryOptimizer;
-class EvaluationProgress;
 
 class Runner
 {
@@ -24,6 +19,8 @@ class Runner
 	void set_plugin (boost::shared_ptr<Plugin> new_plugin) { plugin = new_plugin; }
 	
 	boost::shared_ptr<EvaluationProgress> start ();
+	
+	bool get_best_params (ScopedParameterValuesPtr & params);
 	
   private:
 	RandomGenerator rg;

@@ -1,5 +1,5 @@
-#ifndef REVERB_TUBER_GUI_MAIN_ASSISTANT_H
-#define REVERB_TUBER_GUI_MAIN_ASSISTANT_H
+#ifndef REVERB_TUNER_GUI_MAIN_ASSISTANT_H
+#define REVERB_TUNER_GUI_MAIN_ASSISTANT_H
 
 #include <gtkmm/assistant.h>
 
@@ -41,4 +41,4 @@ class MainAssistant : public Gtk::Assistant
 	void close ();
 };
 
-#endif // REVERB_TUBER_GUI_MAIN_ASSISTANT_H
+#endif // REVERB_TUNER_GUI_MAIN_ASSISTANT_H

@@ -1,9 +1,9 @@
-#ifndef REVERB_TUBER_GUI_ASSISTANT_PLUGIN_PAGE_H
-#define REVERB_TUBER_GUI_ASSISTANT_PLUGIN_PAGE_H
+#ifndef REVERB_TUNER_GUI_PLUGIN_SELECTION_VIEW_H
+#define REVERB_TUNER_GUI_PLUGIN_SELECTION_VIEW_H
 
 #include <gtkmm.h>
 
-#include "reverbtuner/plugin.h"
+#include "reverbtuner/types.h"
 #include "reverbtuner/lv2_plugin_factory.h"
 
 class PluginSelectionView : public Gtk::VBox
@@ -12,7 +12,7 @@ class PluginSelectionView : public Gtk::VBox
 	PluginSelectionView ();
 	~PluginSelectionView ();
 	
-	ReverbTuner::PluginPtr get_plugin (double samplerate);
+	ReverbTuner::SharedPluginPtr get_plugin (double samplerate);
 	
   private:
 	void populate_plugin_list ();
@@ -24,4 +24,4 @@ class PluginSelectionView : public Gtk::VBox
 	
 };
 
-#endif // REVERB_TUBER_GUI_ASSISTANT_PLUGIN_PAGE_H
+#endif // REVERB_TUNER_GUI_PLUGIN_SELECTION_VIEW_H

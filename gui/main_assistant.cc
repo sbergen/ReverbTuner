@@ -13,7 +13,7 @@
 MainAssistant::MainAssistant ()
   : file_page (*Gtk::manage (new FileSelectionView (runner)))
   , plugin_page (*Gtk::manage (new PluginSelectionView ()))
-  , progress_page (*Gtk::manage (new ProgressView ()))
+  , progress_page (*Gtk::manage (new ProgressView (runner)))
   , progress_page_index (-1)
   , evaluation_started (false)
 {
@@ -47,7 +47,7 @@ MainAssistant::start_evaluation ()
 {
 	if (evaluation_started) { return; }
 	
-	ReverbTuner::PluginPtr plugin = plugin_page.get_plugin (file_page.file_samplerate ());
+	ReverbTuner::SharedPluginPtr plugin = plugin_page.get_plugin (file_page.file_samplerate ());
 	runner.set_plugin (plugin);
 	
 	progress_page.start (runner.start ());

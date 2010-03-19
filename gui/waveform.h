@@ -1,5 +1,5 @@
-#ifndef REVERB_TUBER_GUI_WAVEFORM_H
-#define REVERB_TUBER_GUI_WAVEFORM_H
+#ifndef REVERB_TUNER_GUI_WAVEFORM_H
+#define REVERB_TUNER_GUI_WAVEFORM_H
 
 #include <vector>
 
@@ -26,4 +26,4 @@ class Waveform : public Gtk::DrawingArea
 	unsigned length;
 };
 
-#endif // GTKMM_EXAMPLE_MYAREA_H
+#endif // REVERB_TUNER_GUI_WAVEFORM_H
