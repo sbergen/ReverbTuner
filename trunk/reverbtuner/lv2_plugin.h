@@ -17,7 +17,7 @@ class Lv2Plugin : public Plugin
 {
   public:
 
-	Lv2Plugin (Lv2World & world, SLV2Plugin plugin);
+	Lv2Plugin (Lv2World & world, SLV2Plugin plugin, double samplerate);
 	~Lv2Plugin();
 	
 	PluginPtr clone() const;
@@ -39,6 +39,7 @@ class Lv2Plugin : public Plugin
 	Lv2World & world;
 	SLV2Plugin plugin;
 	SLV2Instance instance;
+	double samplerate;
 	
 	int in_port_index;
 	int out_port_index;

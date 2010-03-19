@@ -17,13 +17,7 @@ Waveform::set_data (std::vector<float> const & new_data, unsigned new_length)
 {
 	data = &new_data;
 	length = new_length;
-	
-	Glib::RefPtr<Gdk::Window> window = get_window ();
-	if (window) {
-		Gdk::Rectangle r (0, 0, get_allocation().get_width(),
-		                  get_allocation().get_height());
-        window->invalidate_rect (r, false);
-	}
+	redraw ();
 }
 
 double
@@ -43,6 +37,17 @@ Waveform::scale_y (double y, double total_height)
 	return y / 2.0 * total_height;
 }
 
+void
+Waveform::redraw ()
+{
+	Glib::RefPtr<Gdk::Window> window = get_window ();
+	if (window) {
+		Gdk::Rectangle r (0, 0, get_allocation().get_width(),
+		                  get_allocation().get_height());
+        window->invalidate_rect (r, false);
+	}
+}
+
 bool
 Waveform::on_expose_event(GdkEventExpose* event)
 {
@@ -54,7 +59,7 @@ Waveform::on_expose_event(GdkEventExpose* event)
 	const int height = allocation.get_height();
 
 	Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
-	cr->set_line_width(0.3);
+	cr->set_line_width (0.5);
 
 	// clip to the area indicated by the expose event so that we only redraw
 	// the portion of the window that needs to be redrawn

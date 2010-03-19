@@ -2,8 +2,7 @@
 
 namespace ReverbTuner {
 
-Lv2World::Lv2World (double samplerate)
-  : samplerate (samplerate)
+Lv2World::Lv2World ()
 {
 	world = slv2_world_new ();
 	slv2_world_load_all (world);
