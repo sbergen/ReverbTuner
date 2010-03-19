@@ -15,7 +15,7 @@ class PluginFactory
 	
 	virtual unsigned plugin_count () = 0;
 	virtual std::string plugin_name (unsigned index) = 0;
-	virtual boost::shared_ptr<Plugin> plugin (unsigned index) = 0;
+	virtual boost::shared_ptr<Plugin> plugin (unsigned index, double samplerate) = 0;
 };
 
 } // namespace ReverbTuner

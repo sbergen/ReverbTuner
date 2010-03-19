@@ -4,8 +4,7 @@
 
 namespace ReverbTuner {
 
-Lv2PluginFactory::Lv2PluginFactory (double samplerate)
-  : world (samplerate)
+Lv2PluginFactory::Lv2PluginFactory ()
 {
 }
 
@@ -23,10 +22,10 @@ Lv2PluginFactory::plugin_name (unsigned index)
 }
 
 boost::shared_ptr<Plugin>
-Lv2PluginFactory::plugin (unsigned index)
+Lv2PluginFactory::plugin (unsigned index, double samplerate)
 {
 	SLV2Plugin plugin = slv2_plugins_get_at (world.plugins, index);
-	return boost::shared_ptr<Lv2Plugin> (new Lv2Plugin (world, plugin));
+	return boost::shared_ptr<Lv2Plugin> (new Lv2Plugin (world, plugin, samplerate));
 }
 
 

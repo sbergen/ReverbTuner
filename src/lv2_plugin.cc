@@ -6,12 +6,13 @@
 
 namespace ReverbTuner {
 
-Lv2Plugin::Lv2Plugin (Lv2World & world, SLV2Plugin plugin)
+Lv2Plugin::Lv2Plugin (Lv2World & world, SLV2Plugin plugin, double samplerate)
   : world (world)
   , plugin (plugin)
+  , samplerate (samplerate)
   , param_vals (param_set)
 {
-	instance = slv2_plugin_instantiate (plugin, world.samplerate, NULL);
+	instance = slv2_plugin_instantiate (plugin, samplerate, NULL);
 	init_params_from_plugin ();
 	slv2_instance_activate (instance);
 }
@@ -25,7 +26,7 @@ Lv2Plugin::~Lv2Plugin()
 PluginPtr
 Lv2Plugin::clone() const
 {
-	return PluginPtr (new Lv2Plugin (world, plugin));
+	return PluginPtr (new Lv2Plugin (world, plugin, samplerate));
 }
 
 void

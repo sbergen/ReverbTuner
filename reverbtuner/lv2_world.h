@@ -9,7 +9,7 @@ namespace ReverbTuner {
 
 struct Lv2World
 {
-	Lv2World (double samplerate);
+	Lv2World ();
 	~Lv2World ();
 
 	/// Return Value as float, free value struct
@@ -18,7 +18,6 @@ struct Lv2World
 	/// Return value as string, free value struct
 	static std::string value_as_string (SLV2Value val);
 	
-	double      samplerate;
 	SLV2World   world;
 	SLV2Plugins plugins;
 	

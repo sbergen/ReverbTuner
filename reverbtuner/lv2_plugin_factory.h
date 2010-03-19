@@ -12,11 +12,11 @@ class Lv2PluginFactory : public PluginFactory
 {
   public:
 
-	Lv2PluginFactory (double samplerate);
+	Lv2PluginFactory ();
 	
 	unsigned plugin_count ();
 	std::string plugin_name (unsigned index);
-	boost::shared_ptr<Plugin> plugin (unsigned index);
+	boost::shared_ptr<Plugin> plugin (unsigned index, double samplerate);
 
   private:
 	Lv2World    world;

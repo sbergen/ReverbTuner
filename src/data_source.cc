@@ -10,8 +10,11 @@ DataSource::DataSource (std::string const & dry_filefilename, std::string const 
 	SndfileHandle dry_file (dry_filefilename);
 	SndfileHandle target_file (target_filefilename);
 	
-	if (dry_file.error () || target_file.error ()) {
-		throw std::invalid_argument ("Failed to load a file");
+	if (dry_file.error ()) {
+		throw std::invalid_argument (dry_file.strError ());
+	}
+	if (target_file.error ()) {
+		throw std::invalid_argument (target_file.strError ());
 	}
 	
 	samplerate = dry_file.samplerate ();
