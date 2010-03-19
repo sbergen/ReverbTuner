@@ -7,6 +7,7 @@
 #include "reverbtuner/types.h"
 
 #include "parameter_view.h"
+#include "progress_plot.h"
 
 class ProgressView : public Gtk::VBox
 {
@@ -30,8 +31,10 @@ class ProgressView : public Gtk::VBox
 	Gtk::ProgressBar bar;
 	Gtk::Button abort_button;
 	
+	ProgressPlot progress_plot;
 	ParameterView param_view;
-	
+
+	unsigned last_drawn_round;
 };
 
 #endif // REVERB_TUNER_GUI_PROGRESS_VIEW_H

@@ -17,7 +17,7 @@ MainAssistant::MainAssistant ()
   , progress_page_index (-1)
   , evaluation_started (false)
 {
-	set_default_size(600, 400);
+	set_default_size(700, 700);
 	
 	append_page (file_page);
 	set_page_title(file_page, "Select impulse files");

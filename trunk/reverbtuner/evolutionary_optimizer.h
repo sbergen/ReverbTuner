@@ -34,7 +34,6 @@ class EvolutionaryOptimizer
 	// Parameter modification
 	void randomize_all_values (ParameterValues & values);
 	void mutate (ParameterValues & values);
-	void mutate_one (ParameterValues & values);
 	void cross_over_from_selected (ParameterValues & values);
 	
 	// Selection
@@ -75,7 +74,8 @@ class EvolutionaryOptimizer
 	unsigned best_selection_size;
 	unsigned random_selection_size;
 	unsigned number_of_parents;
-	unsigned maximum_mutations;
+	float mutation_probability;
+	float uniform_probability;
 	
 };
 

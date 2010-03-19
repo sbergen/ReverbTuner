@@ -32,12 +32,13 @@ EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, Ev
 //  , rounds (10)
 //  , population_size (200)
   , rounds (100)
-  , population_size (200)
+  , population_size (300)
   
-  , best_selection_size (8)
-  , random_selection_size (3)
+  , best_selection_size (20)
+  , random_selection_size (5)
   , number_of_parents (2)
-  , maximum_mutations (2)
+  , mutation_probability (0.2)
+  , uniform_probability (0.2)
 {
 }
 
@@ -104,13 +105,12 @@ EvolutionaryOptimizer::initialize_set ()
 void
 EvolutionaryOptimizer::randomize_all_values (ParameterValues & values)
 {
-	bool const triangular = rg.random_bool ();
 	ParameterSet const & set = values.get_set ();
 	for (ParameterSet::iterator it = set.begin (); it != set.end (); ++it) {
-		if (triangular) {
-			param_modifier.randomize_triangular (values[it->first], *it->second);
-		} else {
+		if (rg.random_bool (uniform_probability)) {
 			param_modifier.randomize_uniform (values[it->first], *it->second);
+		} else {
+			param_modifier.randomize_triangular (values[it->first], *it->second);
 		}
 	}
 }
@@ -118,17 +118,16 @@ EvolutionaryOptimizer::randomize_all_values (ParameterValues & values)
 void
 EvolutionaryOptimizer::mutate (ParameterValues & values)
 {
-	unsigned mutations = rg.random_less_than (maximum_mutations + 1);
-	for (unsigned i = 0; i < mutations; ++i) {
-		mutate_one (values);
+	ParameterSet const & set = values.get_set ();
+	for (ParameterSet::iterator it = set.begin (); it != set.end (); ++it) {
+		if (rg.random_bool (mutation_probability)) {
+			if (rg.random_bool (uniform_probability)) {
+				param_modifier.randomize_uniform (values[it->first], *it->second);
+			} else {
+				param_modifier.randomize_triangular (values[it->first], *it->second);
+			}
+		}
 	}
-}
-
-void
-EvolutionaryOptimizer::mutate_one (ParameterValues & values)
-{
-	unsigned index = values.get_set ().random_index (rg);
-	param_modifier.randomize_uniform (values[index], values.get_set ()[index]);
 }
 
 void
