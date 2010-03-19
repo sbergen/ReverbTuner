@@ -1,11 +1,13 @@
 #include "progress_view.h"
 
 
-ProgressView::ProgressView ()
+ProgressView::ProgressView (ReverbTuner::Runner & runner)
   : abort_button ("Stop evaluation")
+  , param_view (runner)
 {
 	pack_start (bar, false, false);
 	pack_start (abort_button, false, false);
+	pack_start (param_view, false, false);
 	
 	abort_button.set_sensitive (false);
 	abort_button.signal_clicked ().connect (sigc::mem_fun (*this, &ProgressView::abort));
@@ -17,7 +19,7 @@ ProgressView::~ProgressView ()
 }
 
 void
-ProgressView::start (ProgressPtr progress_struct)
+ProgressView::start (ReverbTuner::SharedEvaluationProgressPtr progress_struct)
 {
 	progress = progress_struct;
 	progress_connection = Glib::signal_timeout().connect (sigc::mem_fun (*this, &ProgressView::progress_timeout), 100);
@@ -41,6 +43,8 @@ ProgressView::abort ()
 gint
 ProgressView::progress_timeout ()
 {
+	param_view.update ();
+	
 	unsigned total = progress->total_rounds ();
 	unsigned current = progress->current_round ();
 	

@@ -32,5 +32,12 @@ Runner::start ()
 	return progress;
 }
 
+bool
+Runner::get_best_params (ScopedParameterValuesPtr & params)
+{
+	if (!optimizer) { return false; }
+	return optimizer->get_best_params (params);
+}
+
 } // namespace ReverbTuner
 

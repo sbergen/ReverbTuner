@@ -75,6 +75,7 @@ def build(bld):
 		gui/main.cc
 		gui/file_selection_view.cc
 		gui/main_assistant.cc
+		gui/parameter_view.cc
 		gui/plugin_selection_view.cc
 		gui/progress_view.cc
 		gui/waveform.cc

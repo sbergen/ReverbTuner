@@ -3,13 +3,12 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "reverbtuner/types.h"
+
 namespace ReverbTuner {
 
 class ParameterValues;
 class ParameterSet;
-
-class Plugin;
-typedef boost::shared_ptr<Plugin> PluginPtr;
 
 class Plugin
 {
@@ -17,7 +16,7 @@ class Plugin
 
 	virtual ~Plugin() {}
 	
-	virtual PluginPtr clone() const = 0;
+	virtual SharedPluginPtr clone() const = 0;
 	virtual void reset () = 0;
 	virtual void run (float const * in, float * out, unsigned frames) = 0;
 	virtual unsigned latency () = 0;

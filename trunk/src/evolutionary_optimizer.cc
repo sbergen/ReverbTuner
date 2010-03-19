@@ -54,6 +54,15 @@ EvolutionaryOptimizer::run (boost::shared_ptr<EvaluationProgress> progress_)
 	boost::thread (boost::bind (&EvolutionaryOptimizer::do_run, this));
 }
 
+bool
+EvolutionaryOptimizer::get_best_params (ScopedParameterValuesPtr & result)
+{
+	LockGuard lg (params_mutex);
+	if (!best_params) { return false; }
+	result.reset (new ParameterValues (*best_params));
+	return true;
+}
+
 void
 EvolutionaryOptimizer::do_run ()
 {
@@ -160,6 +169,7 @@ EvolutionaryOptimizer::store_best_result ()
 	float this_time_best = best_it->first;
 	if (this_time_best > best_value) {
 		best_value = this_time_best;
+		LockGuard lg (params_mutex);
 		best_params.reset (new ParameterValues (*best_it->second));
 	}
 	

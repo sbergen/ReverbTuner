@@ -2,11 +2,13 @@
 #define REVERB_TUNER_EVOLUTIONARY_OPTIMIZER_H
 
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/thread.hpp>
 
 #include "reverbtuner/evaluation_set.h"
 #include "reverbtuner/parameter_modifier.h"
+#include "reverbtuner/types.h"
 
 namespace ReverbTuner {
 
@@ -22,7 +24,8 @@ class EvolutionaryOptimizer
 	~EvolutionaryOptimizer ();
 
 	/// Runs evaluation in new thread. Progress information is shared via the structure
-	void run (boost::shared_ptr<EvaluationProgress> progress_);
+	void run (SharedEvaluationProgressPtr progress_);
+	bool get_best_params (ScopedParameterValuesPtr & params);
 	
   private:
 	void do_run ();
@@ -54,6 +57,7 @@ class EvolutionaryOptimizer
 	
 	float best_value;
 	boost::scoped_ptr<ParameterValues> best_params;
+	boost::mutex params_mutex;
 	
 	boost::shared_ptr<EvaluationProgress> progress;
 	

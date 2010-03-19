@@ -1,15 +1,12 @@
-#ifndef REVERB_TUBER_GUI_ASSISTANT_FILE_PAGE_H
-#define REVERB_TUBER_GUI_ASSISTANT_FILE_PAGE_H
+#ifndef REVERB_TUNER_GUI_FILE_SELECTION_VIEW_H
+#define REVERB_TUNER_GUI_FILE_SELECTION_VIEW_H
 
 #include <boost/shared_ptr.hpp>
 #include <gtkmm.h>
 
-#include "waveform.h"
+#include "reverbtuner/types.h"
 
-namespace ReverbTuner {
-	class DataSource;
-	class Runner;
-}
+#include "waveform.h"
 
 class FileSelectionView : public Gtk::VBox
 {
@@ -53,8 +50,7 @@ class FileSelectionView : public Gtk::VBox
 	Waveform dry_waveform;
 	
 	// Data
-	typedef boost::shared_ptr<ReverbTuner::DataSource> DataSourcePtr;
-	DataSourcePtr data_source;
+	ReverbTuner::SharedDataSourcePtr data_source;
 };
 
-#endif // REVERB_TUBER_GUI_ASSISTANT_FILE_PAGE_H
+#endif // REVERB_TUNER_GUI_FILE_SELECTION_VIEW_H

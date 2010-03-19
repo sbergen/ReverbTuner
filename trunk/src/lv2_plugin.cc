@@ -23,10 +23,10 @@ Lv2Plugin::~Lv2Plugin()
 }
 
 
-PluginPtr
+SharedPluginPtr
 Lv2Plugin::clone() const
 {
-	return PluginPtr (new Lv2Plugin (world, plugin, samplerate));
+	return SharedPluginPtr (new Lv2Plugin (world, plugin, samplerate));
 }
 
 void

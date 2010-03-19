@@ -3,6 +3,8 @@
 
 #include <boost/thread.hpp>
 
+#include "types.h"
+
 namespace ReverbTuner {
 
 class EvaluationProgress
@@ -39,7 +41,6 @@ class EvaluationProgress
 
   private:
 	mutable boost::mutex mutex;
-	typedef boost::lock_guard<boost::mutex> LockGuard;
 	
 	float _best_result;
 	unsigned _total_rounds;

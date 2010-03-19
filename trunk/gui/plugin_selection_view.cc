@@ -15,11 +15,11 @@ PluginSelectionView::~PluginSelectionView ()
 
 }
 
-ReverbTuner::PluginPtr
+ReverbTuner::SharedPluginPtr
 PluginSelectionView::get_plugin (double samplerate)
 {
 	Gtk::ListViewText::SelectionList selected = plugin_list.get_selected ();
-	if (!selected.size ()) { return ReverbTuner::PluginPtr (); }
+	if (!selected.size ()) { return ReverbTuner::SharedPluginPtr (); }
 	return factory.plugin (selected[0], samplerate);
 }
 
