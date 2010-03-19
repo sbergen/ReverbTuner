@@ -4,8 +4,8 @@
 
 #include <gtkmm/main.h>
 
-#include "assistant_file_page.h"
-#include "assistant_plugin_page.h"
+#include "file_selection_view.h"
+#include "plugin_selection_view.h"
 
 MainAssistant::MainAssistant ()
 {
