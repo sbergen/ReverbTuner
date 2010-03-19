@@ -8,19 +8,24 @@
 
 namespace ReverbTuner {
 	class DataSource;
+	class Runner;
 }
 
 class FileSelectionView : public Gtk::VBox
 {
   public:
-	FileSelectionView ();
+	FileSelectionView (ReverbTuner::Runner & runner);
 	~FileSelectionView ();
 	
 	sigc::signal<void, Gtk::Widget &, bool> complete_changed;
 	
+	double file_samplerate ();
+	
   private:
 
 	void load_files ();
+	
+	ReverbTuner::Runner & runner;
 	
 	class FileChooser : public Gtk::VBox
 	{

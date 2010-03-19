@@ -18,7 +18,7 @@ class EvaluationScheduler
 	/** Initialize evaluators
 	  * \param amount number of evaluators to instantiate
 	  */
-	virtual void alloc_resources (unsigned amount) = 0;
+	virtual void alloc_resources (unsigned amount = 1) = 0;
 	
 	/** Evaluates a set of paramters. Blocks until evaluation is finished.
 	  */

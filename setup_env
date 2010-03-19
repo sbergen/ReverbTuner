@@ -1,2 +1,2 @@
-export LD_LIBRARY_PATH=/usr/local:/usr/local/aubio:build/default:$LD_LIBRARY_PATH
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/aubio/lib/pkgconfig:$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=build/default:/usr/local/aubio/lib:/usr/local:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=/usr/local/aubio/lib/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH

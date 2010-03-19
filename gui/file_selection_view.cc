@@ -1,9 +1,11 @@
 #include "file_selection_view.h"
 
 #include "reverbtuner/data_source.h"
+#include "reverbtuner/runner.h"
 
-FileSelectionView::FileSelectionView ()
-  : wet_file_chooser ("Wet impulse file:", "samples/sample.wav")
+FileSelectionView::FileSelectionView (ReverbTuner::Runner & runner)
+  : runner (runner)
+  , wet_file_chooser ("Wet impulse file:", "samples/sample.wav")
   , dry_file_chooser ("Dry impulse file:", "samples/impulse.wav")
   , load_button ("Load files")
 {
@@ -19,6 +21,13 @@ FileSelectionView::FileSelectionView ()
 FileSelectionView::~FileSelectionView ()
 {
 
+}
+
+double
+FileSelectionView::file_samplerate ()
+{
+	if (!data_source) { return -1; }
+	return data_source->get_samplerate ();
 }
 
 void
@@ -44,6 +53,8 @@ FileSelectionView::load_files ()
 	
 	wet_waveform.set_data (wet_data, wet_data.size());
 	dry_waveform.set_data (dry_data, wet_data.size());
+	
+	runner.set_data_source (data_source);
 	
 	complete_changed (*this, true);
 }

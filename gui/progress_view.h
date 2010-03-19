@@ -15,6 +15,7 @@ class ProgressView : public Gtk::VBox
 	void start (ProgressPtr progress_struct);
 	
 	sigc::signal<void> signal_aborted;
+	sigc::signal<void, Gtk::Widget &, bool> complete_changed;
 	
   private:
 	

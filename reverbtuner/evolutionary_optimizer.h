@@ -21,9 +21,11 @@ class EvolutionaryOptimizer
 	EvolutionaryOptimizer (DataSource const & data_source, EvaluationScheduler & scheduler, RandomGenerator & rg);
 	~EvolutionaryOptimizer ();
 
+	/// Runs evaluation in new thread. Progress information is shared via the structure
 	void run (boost::shared_ptr<EvaluationProgress> progress_);
 	
   private:
+	void do_run ();
 	void initialize_set ();
 	
 	// Parameter modification

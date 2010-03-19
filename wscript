@@ -62,6 +62,7 @@ def build(bld):
 		src/mfcc_processor.cc
 		src/parameter_modifier.cc
 		src/parameter_values.cc
+		src/runner.cc
 	'''
 	reverbtuner.includes     = '.'
 	reverbtuner.uselib       = 'SLV2 AUBIO SNDFILE'
