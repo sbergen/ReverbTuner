@@ -73,6 +73,7 @@ def build(bld):
 	gui.source = '''
 		gui/main.cc
 		gui/assistant_file_page.cc
+		gui/assistant_plugin_page.cc
 		gui/main_assistant.cc
 		gui/waveform.cc
 	'''

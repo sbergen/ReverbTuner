@@ -3,11 +3,24 @@
 
 #include <gtkmm.h>
 
+#include "reverbtuner/plugin.h"
+#include "reverbtuner/lv2_plugin_factory.h"
+
 class AssistantPluginPage : public Gtk::VBox
 {
   public:
+	AssistantPluginPage ();
+	~AssistantPluginPage ();
+	
+	ReverbTuner::PluginPtr get_plugin (double samplerate);
 	
   private:
+	void populate_plugin_list ();
+	
+	Gtk::ScrolledWindow plugin_scroller;
+	Gtk::ListViewText plugin_list;
+	
+	ReverbTuner::Lv2PluginFactory factory;
 	
 };
 
