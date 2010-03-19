@@ -29,6 +29,7 @@ class MfccEvaluator : public Evaluator
 	void init_static_data (DataSource const & data_source);
 	void init_coef_data (CoefData & data);
 	void run_mfcc (Data const & in, CoefData & result, unsigned frames, bool run_plugin);
+	float coef_difference (CoefData const & a, CoefData const & b);
 	float euclidean_distance (Data const & a, Data const & b);
 	
 	boost::shared_ptr<Plugin> plugin;
@@ -48,6 +49,7 @@ class MfccEvaluator : public Evaluator
 	static bool static_init_done;
 	static unsigned target_length;
 	static CoefData target_coefs;
+	static float target_zero_difference;
 	static const Data zero_buffer;
 };
 

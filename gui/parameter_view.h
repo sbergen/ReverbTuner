@@ -15,6 +15,7 @@ class ParameterView : public Gtk::VBox
 	~ParameterView ();
 	
 	void update ();
+	void reset ();
 	
   private:
 	

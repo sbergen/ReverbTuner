@@ -35,6 +35,13 @@ ParameterView::update ()
 }
 
 void
+ParameterView::reset ()
+{
+	model->clear ();
+	model_ready = false;
+}
+
+void
 ParameterView::init_model ()
 {
 	if (!values) { return; }

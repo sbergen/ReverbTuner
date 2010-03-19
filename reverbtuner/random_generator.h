@@ -28,7 +28,7 @@ class RandomGenerator
 	unsigned random_less_than (unsigned max)
 		{ return boost::uniform_smallint<unsigned> (0, max - 1) (rng); }
 	
-	bool random_bool () { return uniform_generator() < 0.5; }
+	bool random_bool (float probablility = 0.5) { return uniform_generator() <= probablility; }
 	unsigned random_uint () { return rng(); }
 	
   private:
