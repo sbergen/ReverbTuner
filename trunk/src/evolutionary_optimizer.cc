@@ -5,6 +5,8 @@
 #include <set>
 
 #include <boost/assign/ptr_map_inserter.hpp>
+#include <boost/thread.hpp>
+#include <boost/function.hpp>
 
 #include "reverbtuner/data_source.h"
 #include "reverbtuner/evaluation_progress.h"
@@ -29,7 +31,7 @@ EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, Ev
   , best_value (-std::numeric_limits<float>::infinity())
 //  , rounds (10)
 //  , population_size (200)
-  , rounds (10)
+  , rounds (100)
   , population_size (200)
   
   , best_selection_size (8)
@@ -49,7 +51,12 @@ EvolutionaryOptimizer::run (boost::shared_ptr<EvaluationProgress> progress_)
 {
 	progress = progress_;
 	progress->set_total_rounds (rounds);
-	
+	boost::thread (boost::bind (&EvolutionaryOptimizer::do_run, this));
+}
+
+void
+EvolutionaryOptimizer::do_run ()
+{
 	initialize_set ();
 	
 	for (unsigned i = 0; i < rounds; ++i) {
@@ -64,6 +71,7 @@ EvolutionaryOptimizer::run (boost::shared_ptr<EvaluationProgress> progress_)
 		reproduce_from_selected ();
 	}
 	
+	progress->set_done ();
 	std::cout << *best_params;
 }
 
