@@ -1,4 +1,4 @@
-#include "assistant_plugin_page.h"
+#include "plugin_selection_view.h"
 
 AssistantPluginPage::AssistantPluginPage ()
   : plugin_list (1)

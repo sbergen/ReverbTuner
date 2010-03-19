@@ -72,9 +72,9 @@ def build(bld):
 	gui = bld.new_task_gen('cxx', 'cprogram')
 	gui.source = '''
 		gui/main.cc
-		gui/assistant_file_page.cc
-		gui/assistant_plugin_page.cc
+		gui/file_selection_view.cc
 		gui/main_assistant.cc
+		gui/plugin_selection_view.cc
 		gui/progress_view.cc
 		gui/waveform.cc
 	'''
