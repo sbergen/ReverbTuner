@@ -32,13 +32,14 @@ EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, Ev
 //  , rounds (10)
 //  , population_size (200)
   , rounds (100)
-  , population_size (300)
+  , population_size (200)
   
-  , best_selection_size (20)
+  , best_selection_size (15)
   , random_selection_size (5)
   , number_of_parents (2)
-  , mutation_probability (0.2)
-  , uniform_probability (0.2)
+  , set_mutation_probability (0.1)
+  , parameter_mutation_probability (0.3)
+  , uniform_probability (0.4)
 {
 }
 
@@ -67,7 +68,7 @@ EvolutionaryOptimizer::get_best_params (ScopedParameterValuesPtr & result)
 void
 EvolutionaryOptimizer::do_run ()
 {
-	initialize_set ();
+	ensure_population_size ();
 	
 	for (unsigned i = 0; i < rounds; ++i) {
 		if (progress->aborted()) { return; }
@@ -78,6 +79,7 @@ EvolutionaryOptimizer::do_run ()
 		store_best_result ();
 		select_best ();
 		select_random ();
+		ensure_population_size ();
 		reproduce_from_selected ();
 	}
 	
@@ -86,20 +88,9 @@ EvolutionaryOptimizer::do_run ()
 }
 
 void
-EvolutionaryOptimizer::initialize_set ()
+EvolutionaryOptimizer::ensure_population_size ()
 {
-	evaluation_set.resize (population_size);
-	
-	ParameterValues * parameters;
-	EvaluationResult * result;
-	evaluation_set.go_to_first();
-	
-	// Skip one set of parameters and leave them to defaults
-	evaluation_set.next_pair (parameters, result);
-	
-	while (evaluation_set.next_pair (parameters, result)) {
-		randomize_all_values (*parameters);
-	}
+	evaluation_set.resize (population_size, boost::bind (&EvolutionaryOptimizer::randomize_all_values, this, _1));
 }
 
 void
@@ -120,7 +111,7 @@ EvolutionaryOptimizer::mutate (ParameterValues & values)
 {
 	ParameterSet const & set = values.get_set ();
 	for (ParameterSet::iterator it = set.begin (); it != set.end (); ++it) {
-		if (rg.random_bool (mutation_probability)) {
+		if (rg.random_bool (parameter_mutation_probability)) {
 			if (rg.random_bool (uniform_probability)) {
 				param_modifier.randomize_uniform (values[it->first], *it->second);
 			} else {
@@ -157,7 +148,7 @@ EvolutionaryOptimizer::results_into_map ()
 	
 	evaluation_set.go_to_first ();
 	while (evaluation_set.next_pair (parameters, result)) {
-		all_results[*result] = parameters;
+		all_results.insert (std::make_pair<float, ParameterValues const *> (*result, parameters));
 	}
 }
 
@@ -209,9 +200,19 @@ EvolutionaryOptimizer::reproduce_from_selected ()
 	EvaluationResult * result;
 	
 	evaluation_set.go_to_first();
+	
+	// Fist add the selected ones
+	for (ResultPtrMap::const_iterator it = selected_results.begin (); it != selected_results.end (); ++it) {
+		if (!evaluation_set.next_pair (parameters, result)) { return; } // Something is wrong...
+		*parameters = *it->second;
+	}
+	
+	// The cross over
 	while (evaluation_set.next_pair (parameters, result)) {
 		cross_over_from_selected (*parameters);
-		mutate (*parameters);
+		if (rg.random_bool (set_mutation_probability)) {
+			mutate (*parameters);
+		}
 	}
 }
 

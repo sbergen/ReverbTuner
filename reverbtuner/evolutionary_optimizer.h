@@ -29,7 +29,7 @@ class EvolutionaryOptimizer
 	
   private:
 	void do_run ();
-	void initialize_set ();
+	void ensure_population_size ();
 	
 	// Parameter modification
 	void randomize_all_values (ParameterValues & values);
@@ -62,10 +62,10 @@ class EvolutionaryOptimizer
 	
   private: // intermediate data
 	// We need to take a copy of selected values
-	typedef boost::ptr_map<float, ParameterValues> ResultPtrMap;
+	typedef boost::ptr_multimap<float, ParameterValues> ResultPtrMap;
 	ResultPtrMap selected_results;
 	
-	typedef std::map<float, ParameterValues const *> ResultMap;
+	typedef std::multimap<float, ParameterValues const *> ResultMap;
 	ResultMap all_results;
 	
   private: // Algorithm parameters
@@ -74,7 +74,8 @@ class EvolutionaryOptimizer
 	unsigned best_selection_size;
 	unsigned random_selection_size;
 	unsigned number_of_parents;
-	float mutation_probability;
+	float set_mutation_probability;
+	float parameter_mutation_probability;
 	float uniform_probability;
 	
 };

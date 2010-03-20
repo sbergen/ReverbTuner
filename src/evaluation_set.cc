@@ -5,13 +5,17 @@
 namespace ReverbTuner {
 
 void
-EvaluationSet::resize (unsigned new_size)
+EvaluationSet::resize (unsigned new_size, ParameterInitializer initializer)
 {
-	while (data.size() < new_size) {
+	long int size_diff = new_size - data.size();
+	while (size_diff > 0) {
 		boost::assign::ptr_push_back (data) (param_set);
+		initializer (data.back ().parameters);
+		--size_diff;
 	}
-	while (data.size() > new_size) {
+	while (size_diff < 0) {
 		data.pop_back ();
+		++size_diff;
 	}
 }
 
