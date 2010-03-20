@@ -2,6 +2,7 @@
 #define REVERB_TUNER_EVALUATION_SET_H
 
 #include <boost/ptr_container/ptr_list.hpp>
+#include <boost/function.hpp>
 
 #include "reverbtuner/evaluation_result.h"
 #include "reverbtuner/parameter_values.h"
@@ -19,7 +20,9 @@ class EvaluationSet
   public:
 	EvaluationSet (ParameterSet const & param_set) : param_set (param_set) {}
 	
-	void resize (unsigned new_size);
+	typedef boost::function<void (ParameterValues &)> ParameterInitializer;
+	void resize (unsigned new_size, ParameterInitializer initializer = ParameterInitializer ());
+	
 	unsigned size() { return data.size(); }
 	void go_to_first () const { current_item = data.begin(); }
 	bool next_pair (ParameterValues const *& parameters, EvaluationResult *& result) const throw()
