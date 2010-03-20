@@ -52,9 +52,9 @@ def build(bld):
 
 	reverbtuner = bld.new_task_gen('cxx', 'cshlib')
 	reverbtuner.source = '''
+		src/basic_evaluation_set.cc
 		src/data_source.cc
 		src/evolutionary_optimizer.cc
-		src/evaluation_set.cc
 		src/lv2_plugin.cc
 		src/lv2_plugin_factory.cc
 		src/lv2_world.cc
