@@ -6,7 +6,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread.hpp>
 
-#include "reverbtuner/evaluation_set.h"
+#include "reverbtuner/basic_evaluation_set.h"
 #include "reverbtuner/parameter_modifier.h"
 #include "reverbtuner/types.h"
 
@@ -51,7 +51,7 @@ class EvolutionaryOptimizer
 	EvaluationScheduler & scheduler;
 	RandomGenerator & rg;
 	
-	EvaluationSet evaluation_set;
+	BasicEvaluationSet evaluation_set;
 	ParameterModifier param_modifier;
 	
 	float best_value;
