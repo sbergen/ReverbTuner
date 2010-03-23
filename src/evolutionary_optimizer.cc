@@ -84,26 +84,13 @@ EvolutionaryOptimizer::do_run ()
 	}
 	
 	progress->set_done ();
-	std::cout << *best_params;
 }
 
 void
 EvolutionaryOptimizer::ensure_population_size ()
 {
-	evaluation_set.resize (population_size, boost::bind (&EvolutionaryOptimizer::randomize_all_values, this, _1));
-}
-
-void
-EvolutionaryOptimizer::randomize_all_values (ParameterValues & values)
-{
-	ParameterSet const & set = values.get_set ();
-	for (ParameterSet::iterator it = set.begin (); it != set.end (); ++it) {
-		if (rg.random_bool (uniform_probability)) {
-			param_modifier.randomize_uniform (values[it->first], *it->second);
-		} else {
-			param_modifier.randomize_triangular (values[it->first], *it->second);
-		}
-	}
+	evaluation_set.resize (population_size,
+		boost::bind (&ParameterModifier::randomize_all, param_modifier, _1, uniform_probability));
 }
 
 void

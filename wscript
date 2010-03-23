@@ -32,6 +32,7 @@ def configure(conf):
 	autowaf.check_header(conf, 'boost/thread.hpp', mandatory=True)
 	autowaf.check_header(conf, 'boost/shared_ptr.hpp', mandatory=True)
 	autowaf.check_header(conf, 'boost/random.hpp', mandatory=True)
+	autowaf.check_header(conf, 'boost/operators.hpp', mandatory=True)
 	
 	conf.env.append_value('LINKFLAGS', '-lboost_thread-mt')
 	
@@ -62,7 +63,9 @@ def build(bld):
 		src/mfcc_processor.cc
 		src/parameter_modifier.cc
 		src/parameter_values.cc
+		src/particle_swarm_optimizer.cc
 		src/runner.cc
+		src/swarm_evaluation_set.cc
 	'''
 	reverbtuner.includes     = '.'
 	reverbtuner.uselib       = 'SLV2 AUBIO SNDFILE'

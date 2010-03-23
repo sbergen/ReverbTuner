@@ -5,6 +5,7 @@ namespace ReverbTuner {
 
 class Parameter;
 class ParameterSet;
+class ParameterValues;
 class RandomGenerator;
 
 class ParameterModifier
@@ -14,7 +15,11 @@ class ParameterModifier
 	
 	void randomize_uniform (float & value, Parameter const & param);
 	void randomize_triangular (float & value, Parameter const & param);
-	void make_valid (float & value, Parameter const & param);	
+	
+	/** Randomize all parameters
+	 * @param uniform_probability probablility for using a uniform distribution instead of triangular
+	 **/
+	void randomize_all (ParameterValues & values, float uniform_probability);
 	
   private:
 	double samplerate;

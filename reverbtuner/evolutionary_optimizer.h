@@ -12,11 +12,6 @@
 
 namespace ReverbTuner {
 
-class DataSource;
-class EvaluationScheduler;
-class ParameterValues;
-class EvaluationProgress;
-
 class EvolutionaryOptimizer
 {
   public:
@@ -32,7 +27,6 @@ class EvolutionaryOptimizer
 	void ensure_population_size ();
 	
 	// Parameter modification
-	void randomize_all_values (ParameterValues & values);
 	void mutate (ParameterValues & values);
 	void cross_over_from_selected (ParameterValues & values);
 	
@@ -55,10 +49,10 @@ class EvolutionaryOptimizer
 	ParameterModifier param_modifier;
 	
 	float best_value;
-	boost::scoped_ptr<ParameterValues> best_params;
+	ScopedParameterValuesPtr best_params;
 	boost::mutex params_mutex;
 	
-	boost::shared_ptr<EvaluationProgress> progress;
+	SharedEvaluationProgressPtr progress;
 	
   private: // intermediate data
 	// We need to take a copy of selected values

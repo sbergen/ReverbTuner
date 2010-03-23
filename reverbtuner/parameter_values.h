@@ -18,7 +18,9 @@ class ParameterValues
 	
 	ParameterValues (ParameterSet const & set);
 	ParameterValues (ParameterValues const & other);
+	
 	ParameterValues & operator= (ParameterValues const & other);
+	void apply_validated_values (ParameterValues const & other, double samplerate);
 	
 	typedef Values::iterator iterator;
 	typedef Values::const_iterator const_iterator;
@@ -38,6 +40,9 @@ class ParameterValues
 	float operator[] (Parameter const & param) const;
 	
   private:
+	
+	float validate_value (float value, Parameter const & param, double samplerate);
+	
 	ParameterSet const & set;
 	Values values;
 };
