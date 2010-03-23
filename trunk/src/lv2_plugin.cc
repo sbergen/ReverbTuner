@@ -61,7 +61,7 @@ Lv2Plugin::latency ()
 void
 Lv2Plugin::apply_parameters (ParameterValues const & params)
 {
-	param_vals = params;
+	param_vals.apply_validated_values (params, samplerate);
 }
 
 ParameterSet const &

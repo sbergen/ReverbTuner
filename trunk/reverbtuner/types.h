@@ -1,6 +1,10 @@
 #ifndef REVERB_TUNER_TYPES_H
 #define REVERB_TUNER_TYPES_H
 
+#include <map>
+
+/*************** Forward declarations ***********************/
+
 namespace boost {
 	class mutex;
 	
@@ -31,9 +35,12 @@ class PluginFactory;
 class Plugin;
 class RandomGenerator;
 class Runner;
+class SwarmEvaluationSet;
 
 template<typename EvaluatorType> class SingleThreadedScheduler;
 template<typename EvaluatorType> class ThreadedScheduler;
+
+/************************* Typedefs ***********************/
 
 typedef boost::shared_ptr<DataSource> SharedDataSourcePtr;
 typedef boost::shared_ptr<EvaluationProgress> SharedEvaluationProgressPtr;
