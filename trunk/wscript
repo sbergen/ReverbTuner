@@ -64,6 +64,7 @@ def build(bld):
 		src/parameter_modifier.cc
 		src/parameter_values.cc
 		src/particle_swarm_optimizer.cc
+		src/particle_velocity.cc
 		src/runner.cc
 		src/swarm_evaluation_set.cc
 	'''

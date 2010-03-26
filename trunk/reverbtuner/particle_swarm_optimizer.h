@@ -24,17 +24,24 @@ class ParticleSwarmOptimizer
 	bool get_best_params (ScopedParameterValuesPtr & params);
 	
   private:
+	
+	typedef SwarmEvaluationSet::Particle Particle;
+	
 	void do_run ();
 	
 	void ensure_population_size ();
 	void initialize_global_best ();
 	
 	void move_particles ();
-	void move_particle (SwarmEvaluationSet::Particle & particle);
-	void update_local_best (SwarmEvaluationSet::Particle & particle);
-	void update_global_best (SwarmEvaluationSet::Particle const & particle);
+	void move_particle (Particle & particle);
+	void update_particle_velocity (Particle & particle);
+	void update_local_best (Particle & particle);
+	void update_global_best (Particle const & particle);
 	
-	
+	void init_random_velocity (ParticleVelocity & velocity, unsigned size);
+	void init_random_velocity_for_set (ParticleVelocity & velocity, ParameterSet const & set);
+	void init_local_velocity (ParticleVelocity & velocity, Particle & particle);
+	void init_global_velocity (ParticleVelocity & velocity, Particle & particle);
 	
 	ScopedParameterValuesPtr global_best_values;
 	EvaluationResult global_best_result;
@@ -52,7 +59,10 @@ class ParticleSwarmOptimizer
   private: // Algorithm parameters
 	unsigned rounds;
 	unsigned population_size;
-	float velocity;
+	
+	float initial_velocity;
+	float velocity_change_rate;
+	float global_velocity_weight;
 };
 
 } // namespace ReverbTuner

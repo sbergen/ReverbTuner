@@ -22,6 +22,8 @@ class ParameterValues
 	ParameterValues & operator= (ParameterValues const & other);
 	void apply_validated_values (ParameterValues const & other, double samplerate);
 	
+	unsigned size () const { return values.size (); }
+	
 	typedef Values::iterator iterator;
 	typedef Values::const_iterator const_iterator;
 	

@@ -16,6 +16,8 @@ class ParameterSet
 {
   public:
 	
+	unsigned size () const { return parameters.size (); }
+	
 	typedef boost::ptr_map<unsigned, Parameter> Container;
 	typedef Container::const_iterator iterator;
 	

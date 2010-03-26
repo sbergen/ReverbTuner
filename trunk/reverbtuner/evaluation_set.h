@@ -1,7 +1,6 @@
 #ifndef REVERB_TUNER_EVALUATION_SET_H
 #define REVERB_TUNER_EVALUATION_SET_H
 
-
 #include "reverbtuner/types.h"
 
 namespace ReverbTuner {
@@ -12,7 +11,6 @@ class EvaluationSet
   public:
 	
 	typedef boost::function<void (ParameterValues &)> ParameterInitializer;
-	virtual void resize (unsigned new_size, ParameterInitializer initializer) = 0;
 	
 	virtual void go_to_first () const = 0;
 	virtual bool next_pair (ParameterValues *& parameters, EvaluationResult *& result) throw() = 0;

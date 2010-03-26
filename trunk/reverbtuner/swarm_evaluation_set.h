@@ -9,6 +9,7 @@
 #include "reverbtuner/evaluation_set.h"
 #include "reverbtuner/evaluation_result.h"
 #include "reverbtuner/parameter_values.h"
+#include "reverbtuner/particle_velocity.h"
 
 namespace ReverbTuner {
 
@@ -24,8 +25,8 @@ class SwarmEvaluationSet : public EvaluationSet
 	SwarmEvaluationSet (ParameterSet const & param_set)
 	  : param_set (param_set) {}
 	
-	typedef boost::function<void (ParameterValues &)> ParameterInitializer;
-	void resize (unsigned new_size, ParameterInitializer initializer = ParameterInitializer ());
+	typedef boost::function<void (ParticleVelocity &, ParameterSet const &)> VelocityInitializer;
+	void resize (unsigned new_size, ParameterInitializer parameter_initializer, VelocityInitializer velocity_initializer);
 	
 	void go_to_first () const { current_item = data.begin(); }
 	bool next_pair (ParameterValues *& parameters, EvaluationResult *& result) throw();
@@ -33,6 +34,8 @@ class SwarmEvaluationSet : public EvaluationSet
 	
   public: // Swarm interface
 	
+	// Contains only particle data.
+	// Operations on particles are performed in ParticleSwarmOptimizer
 	struct Particle
 	{
 		Particle (ParameterSet const & param_set)
@@ -46,8 +49,7 @@ class SwarmEvaluationSet : public EvaluationSet
 		ParameterValues local_best_values;
 		EvaluationResult local_best_result;
 		
-		typedef std::map<unsigned, float> Velocity;
-		Velocity velocity;
+		ParticleVelocity velocity;
 	};
 	
 	typedef boost::ptr_list<Particle> DataContainer;
