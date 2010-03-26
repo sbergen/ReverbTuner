@@ -8,6 +8,7 @@
 
 #include "reverbtuner/evaluation_result.h"
 #include "reverbtuner/parameter_modifier.h"
+#include "reverbtuner/particle_velocity.h"
 #include "reverbtuner/swarm_evaluation_set.h"
 #include "reverbtuner/types.h"
 
@@ -30,7 +31,7 @@ class ParticleSwarmOptimizer
 	void do_run ();
 	
 	void ensure_population_size ();
-	void initialize_global_best ();
+	void initialize_min_velocity (unsigned round);
 	
 	void move_particles ();
 	void move_particle (Particle & particle);
@@ -43,7 +44,9 @@ class ParticleSwarmOptimizer
 	void init_local_velocity (ParticleVelocity & velocity, Particle & particle);
 	void init_global_velocity (ParticleVelocity & velocity, Particle & particle);
 	
-	ScopedParameterValuesPtr global_best_values;
+	void limit_particle_velocity_to_bounds (Particle & particle);
+	
+	ParameterValues global_best_values;
 	EvaluationResult global_best_result;
 	boost::mutex global_best_mutex;
 	
@@ -56,13 +59,21 @@ class ParticleSwarmOptimizer
 	EvaluationScheduler & scheduler;
 	RandomGenerator & rg;
 	
+	ParticleVelocity round_max_velocity;
+	
   private: // Algorithm parameters
 	unsigned rounds;
 	unsigned population_size;
 	
 	float initial_velocity;
-	float velocity_change_rate;
-	float global_velocity_weight;
+	float current_velocity_factor;
+	float local_velocity_factor;
+	float global_velocity_factor;
+	
+	float series_factor;
+	
+  private: // Stuff not really related to algorithm
+	void visualize (Particle & particle);
 };
 
 } // namespace ReverbTuner

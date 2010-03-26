@@ -21,6 +21,7 @@ class ParameterValues
 	
 	ParameterValues & operator= (ParameterValues const & other);
 	void apply_validated_values (ParameterValues const & other, double samplerate);
+	void limit_to_bounds ();
 	
 	unsigned size () const { return values.size (); }
 	
