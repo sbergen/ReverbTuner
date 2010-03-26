@@ -37,6 +37,15 @@ ParameterValues::apply_validated_values (ParameterValues const & other, double s
 	}
 }
 
+void
+ParameterValues::limit_to_bounds ()
+{
+	for (Values::iterator it = values.begin(); it != values.end(); ++it) {
+		Parameter const & param = set[it->first];
+		clamp (it->second, param.min (), param.max ());
+	}
+}
+
 float &
 ParameterValues::operator[] (unsigned index)
 {

@@ -42,4 +42,14 @@ operator+= (ParameterValues & values, ParticleVelocity const & velocity)
 	return values;
 }
 
+std::ostream & operator<< (std::ostream & stream, ParticleVelocity const & velocity)
+{
+	stream << "[ ";
+	for (ParticleVelocity::const_iterator it = velocity.begin (); it != velocity.end (); ++it) {
+		stream << *it << " ";
+	}
+	stream << "]";
+	return stream;
+}
+
 } // namespace ReverbTuner

@@ -1,6 +1,8 @@
 #ifndef REVERB_TUNER_PARTICLE_VELOCITY_H
 #define REVERB_TUNER_PARTICLE_VELOCITY_H
 
+#include <iostream>
+
 #include <boost/numeric/ublas/vector.hpp>
 
 #include "reverbtuner/types.h"
@@ -30,9 +32,14 @@ class ParticleVelocity : public boost::numeric::ublas::vector<float>
 			boost::numeric::ublas::element_prod (*this, other);
 		return *this;
 	}
+	
+	float norm () const
+		{ return boost::numeric::ublas::norm_2 (*this); }
 };
 
 ParameterValues & operator+= (ParameterValues & values, ParticleVelocity const & velocity);
+
+std::ostream & operator<< (std::ostream & stream, ParticleVelocity const & velocity);
 
 } // namespace ReverbTuner
 
