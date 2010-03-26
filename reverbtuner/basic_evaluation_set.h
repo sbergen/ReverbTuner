@@ -21,7 +21,6 @@ class BasicEvaluationSet : public EvaluationSet
   public:
 	BasicEvaluationSet (ParameterSet const & param_set) : param_set (param_set) {}
 	
-	typedef boost::function<void (ParameterValues &)> ParameterInitializer;
 	void resize (unsigned new_size, ParameterInitializer initializer = ParameterInitializer ());
 	
 	void go_to_first () const { current_item = data.begin(); }

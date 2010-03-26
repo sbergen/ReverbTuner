@@ -31,6 +31,8 @@ class Parameter;
 class ParameterModifier;
 class ParameterSet;
 class ParameterValues;
+class ParticleSwarmOptimizer;
+class ParticleVelocity;
 class PluginFactory;
 class Plugin;
 class RandomGenerator;
