@@ -23,12 +23,12 @@ ParticleSwarmOptimizer::ParticleSwarmOptimizer (DataSource const & data_source, 
   , scheduler (scheduler)
   , rg (rg)
   , rounds (200)
-  , population_size (150)
+  , population_size (50)
   , initial_velocity (0.0)
   , current_velocity_factor (1.0)
-  , local_velocity_factor (1.9)
-  , global_velocity_factor (1.9)
-  , series_factor (0.92)
+  , local_velocity_factor (2)
+  , global_velocity_factor (2)
+  , series_factor (0.993)
 {
 
 }
@@ -57,6 +57,9 @@ ParticleSwarmOptimizer::get_best_params (ScopedParameterValuesPtr & params)
 void
 ParticleSwarmOptimizer::do_run ()
 {
+	std::cout << "# Particle swarm optimizer in use " << std::endl;
+	std::cout << "# rounds: " << rounds << ", population size: " << population_size << std::endl;
+	
 	ensure_population_size ();
 	scheduler.evaluate (evaluation_set);
 	
@@ -70,7 +73,7 @@ ParticleSwarmOptimizer::do_run ()
 		move_particles ();
 		scheduler.evaluate (evaluation_set);
 		
-		std::cout << "Best for round: " << global_best_result << std::endl;
+		std::cout << i << '\t' << global_best_result << std::endl;
 	}
 	
 	progress->set_done ();
@@ -121,7 +124,7 @@ ParticleSwarmOptimizer::move_particle (Particle & particle)
 	particle.values.limit_to_bounds ();
 	
 	if (&particle == first_particle) {
-		visualize (particle);
+		// visualize (particle);
 	}
 }
 
@@ -223,7 +226,7 @@ ParticleSwarmOptimizer::visualize (Particle & particle)
 		value = particle.local_best_values[it->first];
 		int local_percentage = 100 * (value - param.min()) / (param.max() - param.min());
 		
-		for (int i = 0; i < 100; ++i) {
+		for (int i = 0; i <= 100; ++i) {
 			if (i == best_percentage) {
 				std::cout << ":";
 			} else if (i == local_percentage) {

@@ -28,8 +28,13 @@ class Runner
 	boost::shared_ptr<DataSource> data_source;
 	boost::shared_ptr<Plugin> plugin;
 	boost::shared_ptr<EvaluationScheduler> scheduler;
-	//boost::shared_ptr<EvolutionaryOptimizer> optimizer;
+	
+#if 1
+	boost::shared_ptr<EvolutionaryOptimizer> optimizer;
+#else
 	boost::shared_ptr<ParticleSwarmOptimizer> optimizer;
+#endif
+	
 	boost::shared_ptr<EvaluationProgress> progress;
 
 };

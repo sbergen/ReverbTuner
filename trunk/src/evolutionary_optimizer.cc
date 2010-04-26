@@ -29,17 +29,16 @@ EvolutionaryOptimizer::EvolutionaryOptimizer (DataSource const & data_source, Ev
   , evaluation_set (data_source.get_plugin()->get_parameters())
   , param_modifier (data_source.get_samplerate(), rg)
   , best_value (-std::numeric_limits<float>::infinity())
-//  , rounds (10)
-//  , population_size (200)
-  , rounds (100)
-  , population_size (200)
+
+  , rounds (200)
+  , population_size (50)
   
-  , best_selection_size (15)
-  , random_selection_size (5)
+  , best_selection_size (0.3 * population_size)
+  , random_selection_size (0.1 * population_size)
   , number_of_parents (2)
-  , set_mutation_probability (0.1)
-  , parameter_mutation_probability (0.3)
-  , uniform_probability (0.4)
+  , set_mutation_probability (0.2)
+  , parameter_mutation_probability (0.1)
+  , uniform_probability (1.0)
 {
 }
 
@@ -68,6 +67,9 @@ EvolutionaryOptimizer::get_best_params (ScopedParameterValuesPtr & result)
 void
 EvolutionaryOptimizer::do_run ()
 {
+	std::cout << "# Evolutionary optimizer in use " << std::endl;
+	std::cout << "# rounds: " << rounds << ", population size: " << population_size << std::endl;
+	
 	ensure_population_size ();
 	
 	for (unsigned i = 0; i < rounds; ++i) {
@@ -77,6 +79,9 @@ EvolutionaryOptimizer::do_run ()
 		scheduler.evaluate (evaluation_set);
 		results_into_map ();
 		store_best_result ();
+		
+		std::cout << i << '\t' << best_value << std::endl;
+		
 		select_best ();
 		select_random ();
 		ensure_population_size ();
@@ -151,7 +156,6 @@ EvolutionaryOptimizer::store_best_result ()
 	}
 	
 	progress->set_best_result (best_value);
-	std::cout << "Best for round: " << this_time_best << std::endl;
 }
 
 void
