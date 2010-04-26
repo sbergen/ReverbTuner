@@ -25,8 +25,12 @@ Runner::start ()
 	
 	progress.reset (new EvaluationProgress ());
 	scheduler.reset (new ThreadedScheduler<MfccEvaluator> (*data_source));
-	//optimizer.reset (new EvolutionaryOptimizer (*data_source, *scheduler, rg));
-	optimizer.reset (new ParticleSwarmOptimizer (*data_source, *scheduler, rg));
+	
+#if 1
+optimizer.reset (new EvolutionaryOptimizer (*data_source, *scheduler, rg));
+#else
+optimizer.reset (new ParticleSwarmOptimizer (*data_source, *scheduler, rg));
+#endif
 	
 	scheduler->alloc_resources (boost::thread::hardware_concurrency());
 	optimizer->run (progress);
